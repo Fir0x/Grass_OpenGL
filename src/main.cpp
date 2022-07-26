@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
 #include "glError.h"
@@ -37,22 +38,25 @@ int main(void)
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
-    float positions[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
+    float vertices[] = {
+     0.5f,  0.5f, 0.0f,  // top right
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f, -0.5f, 0.0f,  // bottom left
+    -0.5f,  0.5f, 0.0f   // top left 
+    };
+    unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
     };
 
-    unsigned int indices[3] = {
-        0, 1, 2
-    };
-
-    GLEngine::VertexBuffer vb(positions, sizeof(positions));
+    GLEngine::VertexBuffer vb(vertices, sizeof(vertices));
     GLEngine::VertexArray va(vb);
 
     va.bind();
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(0);
+
+    GLEngine::IndexBuffer ib(indices, 6);
 
     /*unsigned int ibo;
     GL_CALL(glGenBuffers(1, &ibo));
@@ -69,7 +73,8 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        GL_CALL(glDrawArrays(GL_TRIANGLES, 0, 6));
+        ib.bind();
+        GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
