@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 namespace GLEngine
 {
@@ -10,7 +11,7 @@ namespace GLEngine
 		unsigned int m_id;
 		
 	public:
-		VertexArray(const VertexBuffer& vb);
+		VertexArray(const VertexBuffer& vb, const VertexBufferLayout& layout);
 		~VertexArray();
 
 		void bind() const;

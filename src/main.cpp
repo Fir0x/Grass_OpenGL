@@ -11,7 +11,7 @@ int main(void)
 {
     GLFWwindow* window;
 
-    /* Initialize the library */
+    // Initialize the library
     if (!glfwInit())
         return -1;
 
@@ -19,7 +19,7 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    /* Create a windowed mode window and its OpenGL context */
+    // Create a windowed mode window and its OpenGL context
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!window)
     {
@@ -27,7 +27,7 @@ int main(void)
         return -1;
     }
 
-    /* Make the window's context current */
+    // Make the window's context current
     glfwMakeContextCurrent(window);
 
     if (glewInit() != GLEW_OK)
@@ -38,48 +38,47 @@ int main(void)
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
+    //glEnable(GL_DEPTH_TEST);
+    //glDepthFunc(GL_LESS);
+    //glDepthRange(0.0, 1.0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glClearColor(0.4, 0.4, 0.4, 1.0);
+
+
     float vertices[] = {
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right
+     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom right
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom left
+    -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f    // top left 
     };
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
+    unsigned int indices[] = {
+        3, 1, 0,
+        3, 2, 1
     };
 
     GLEngine::VertexBuffer vb(vertices, sizeof(vertices));
-    GLEngine::VertexArray va(vb);
+    GLEngine::VertexBufferLayout layout;
+    layout.Add<float>(3);
+    layout.Add<float>(3);
 
-    va.bind();
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
+    GLEngine::VertexArray va(vb, layout);
 
     GLEngine::IndexBuffer ib(indices, 6);
 
-    /*unsigned int ibo;
-    GL_CALL(glGenBuffers(1, &ibo));
-    GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-    GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW));*/
-
     GLEngine::Shader shader("base.glsl");
     shader.use();
-    shader.setUniform4f("unifcolor", 0.0, 1.0, 0.0, 1.0);
 
-    /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
         ib.bind();
         GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
         glfwPollEvents();
     }
 
