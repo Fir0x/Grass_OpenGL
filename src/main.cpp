@@ -46,40 +46,41 @@ int main(void)
     glFrontFace(GL_CCW);
     glClearColor(0.4, 0.4, 0.4, 1.0);
 
-
-    float vertices[] = {
-     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right
-     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom right
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f    // top left 
-    };
-    unsigned int indices[] = {
-        3, 1, 0,
-        3, 2, 1
-    };
-
-    GLEngine::VertexBuffer vb(vertices, sizeof(vertices));
-    GLEngine::VertexBufferLayout layout;
-    layout.Add<float>(3);
-    layout.Add<float>(3);
-
-    GLEngine::VertexArray va(vb, layout);
-
-    GLEngine::IndexBuffer ib(indices, 6);
-
-    GLEngine::Shader shader("base.glsl");
-    shader.use();
-
-    while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        float vertices[] = {
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f    // top left 
+        };
+        unsigned int indices[] = {
+            3, 1, 0,
+            3, 2, 1
+        };
 
-        ib.bind();
-        GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        GLEngine::VertexBuffer vb(vertices, sizeof(vertices));
+        GLEngine::VertexBufferLayout layout;
+        layout.Add<float>(3);
+        layout.Add<float>(3);
 
-        glfwSwapBuffers(window);
+        GLEngine::VertexArray va(vb, layout);
 
-        glfwPollEvents();
+        GLEngine::IndexBuffer ib(indices, 6);
+
+        GLEngine::Shader shader("base.glsl");
+        shader.use();
+
+        while (!glfwWindowShouldClose(window))
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            ib.bind();
+            GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+            glfwSwapBuffers(window);
+
+            glfwPollEvents();
+        }
     }
 
     glfwTerminate();
