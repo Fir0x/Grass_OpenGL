@@ -21,9 +21,10 @@ namespace GLEngine
 		m_indices.push_back(index);
 	}
 
-	float* Mesh::generateBuffer() const
+	float* Mesh::generateBuffer(size_t &size) const
 	{
-		float* buffer = (float*)malloc(m_vertices.size() * sizeof(float) * 8);
+		size = m_vertices.size() * sizeof(float) * 8;
+		float* buffer = (float*)malloc(size);
 		Vertex* vertHead = (Vertex*)buffer;
 		UV* uvHead = (UV*)(buffer + 3);
 		Normal* normHead = (Normal*)(buffer + 5);
@@ -37,8 +38,13 @@ namespace GLEngine
 		return buffer;
 	}
 
-	int Mesh::triangleCount()
+	int Mesh::triangleCount() const
 	{
 		return m_indices.size() / 3;
+	}
+
+	const std::vector<unsigned int>& Mesh::getIndices() const
+	{
+		return m_indices;
 	}
 }

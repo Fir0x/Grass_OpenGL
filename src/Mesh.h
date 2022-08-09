@@ -32,7 +32,7 @@ namespace GLEngine
 		std::vector<Vertex> m_vertices;
 		std::vector<UV> m_uvs;
 		std::vector<Normal> m_normals;
-		std::vector<int> m_indices;
+		std::vector<unsigned int> m_indices;
 
 	public:
 		/// <summary>
@@ -54,8 +54,9 @@ namespace GLEngine
 		/// Allocate an interleaved buffer to pass to a VBO.
 		/// </summary>
 		/// <returns></returns>
-		float* generateBuffer() const;
+		float* generateBuffer(size_t &size) const;
 
-		int triangleCount();
+		int triangleCount() const;
+		const std::vector<unsigned int>& getIndices() const;
 	};
 }

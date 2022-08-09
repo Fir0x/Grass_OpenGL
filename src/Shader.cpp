@@ -1,6 +1,7 @@
 #include "Shader.h"
 
 #include <GL/glew.h>
+#include <glm/ext.hpp>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -142,5 +143,11 @@ namespace GLEngine
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniform4f(location, v0, v1, v2, v3));
+	}
+
+	void Shader::setUniformMatrix4f(const char* name, glm::mat4 matrix)
+	{
+		int location = getUniformLocation(name);
+		GL_CALL(glUniformMatrix4fv(location, 1, GL_TRUE, glm::value_ptr(matrix)));
 	}
 }

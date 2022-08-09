@@ -8,6 +8,7 @@
 #include "glError.h"
 #include "objLoader.h"
 #include "Camera.h"
+#include "Object.h"
 
 
 
@@ -30,6 +31,8 @@ static void processInput(GLFWwindow* window)
         mainCamera.translate(mainCamera.right() * speed * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         mainCamera.translate(-mainCamera.right() * speed * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
 
 static bool firstFocus = true;
@@ -90,9 +93,9 @@ int main(void)
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
-    //glEnable(GL_DEPTH_TEST);
-    //glDepthFunc(GL_LESS);
-    //glDepthRange(0.0, 1.0);
+    /*glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthRange(0.0, 1.0);*/
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
@@ -101,43 +104,41 @@ int main(void)
     {
         glfwSetCursorPosCallback(window, mouse_callback);
 
-        float vertices[] = {
-         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f    // top left 
-        };
-        unsigned int indices[] = {
-            3, 1, 0,
-            3, 2, 1
-        };
+        mainCamera = GLEngine::Camera(glm::vec3(0.0f, 0.0f, 20.0f));
 
-        GLEngine::VertexBuffer vb(vertices, sizeof(vertices));
-        GLEngine::VertexBufferLayout layout;
-        layout.Add<float>(3);
-        layout.Add<float>(3);
+        std::vector<GLEngine::Object*> toRender;
 
-        GLEngine::VertexArray va(vb, layout);
-
-        GLEngine::IndexBuffer ib(indices, 6);
+        auto meshes = GLEngine::loadOBJ("C:\\Users\\Firox\\Desktop\\cube.obj");
+        for (const auto& mesh : meshes)
+        {
+            toRender.push_back(new GLEngine::Object(mesh));
+        }
 
         GLEngine::Shader shader("base.glsl");
         shader.use();
-
-        auto meshes = GLEngine::loadOBJ("C:\\Users\\Firox\\Desktop\\cube.obj");
 
         while (!glfwWindowShouldClose(window))
         {
             processInput(window);
 
+            shader.setUniformMatrix4f("projectionMatrix", mainCamera.getProjectionMatrix());
+            shader.setUniformMatrix4f("viewMatrix", mainCamera.getViewMatrix());
+
             glClear(GL_COLOR_BUFFER_BIT);
 
-            ib.bind();
-            GL_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+            for (const auto& obj : toRender)
+            {
+                obj->draw();
+            }
 
             glfwSwapBuffers(window);
 
             glfwPollEvents();
+        }
+
+        for (const auto& obj : toRender)
+        {
+            delete obj;
         }
     }
 
