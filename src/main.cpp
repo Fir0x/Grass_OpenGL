@@ -6,6 +6,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "glError.h"
+#include "objLoader.h"
 
 int main(void)
 {
@@ -69,6 +70,8 @@ int main(void)
 
         GLEngine::Shader shader("base.glsl");
         shader.use();
+
+        auto meshes = GLEngine::loadOBJ("C:\\Users\\Firox\\Desktop\\cube.obj");
 
         while (!glfwWindowShouldClose(window))
         {
