@@ -7,6 +7,55 @@
 #include "Shader.h"
 #include "glError.h"
 #include "objLoader.h"
+#include "Camera.h"
+
+
+
+static float lastFrameTime = 0;
+static GLEngine::Camera mainCamera;
+
+static void processInput(GLFWwindow* window)
+{
+    static float speed = 2.5f;
+
+    float currentFrameTime = glfwGetTime();
+    float deltaTime = currentFrameTime - lastFrameTime;
+    lastFrameTime = currentFrameTime;
+
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+        mainCamera.translate(mainCamera.forward() * speed * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        mainCamera.translate(-mainCamera.forward() * speed * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        mainCamera.translate(mainCamera.right() * speed * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        mainCamera.translate(-mainCamera.right() * speed * deltaTime);
+}
+
+static bool firstFocus = true;
+static double lastX;
+static double lastY;
+
+static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstFocus)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstFocus = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    mainCamera.rotate(yoffset, xoffset);
+}
 
 int main(void)
 {
@@ -31,6 +80,8 @@ int main(void)
     // Make the window's context current
     glfwMakeContextCurrent(window);
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     if (glewInit() != GLEW_OK)
     {
         std::cout << "Failed to init GLEW" << std::endl;
@@ -48,6 +99,8 @@ int main(void)
     glClearColor(0.4, 0.4, 0.4, 1.0);
 
     {
+        glfwSetCursorPosCallback(window, mouse_callback);
+
         float vertices[] = {
          0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right
          0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom right
@@ -75,6 +128,8 @@ int main(void)
 
         while (!glfwWindowShouldClose(window))
         {
+            processInput(window);
+
             glClear(GL_COLOR_BUFFER_BIT);
 
             ib.bind();
