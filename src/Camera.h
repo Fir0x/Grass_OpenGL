@@ -34,7 +34,7 @@ namespace GLEngine
 			glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f),
 			float speed = 2.5f);
 
-		void translate(glm::vec3 trans);
+		void translate(const glm::vec3& trans);
 		void translate(float x, float y, float z);
 
 		void rotate(float pitchAngle, float yawAngle);

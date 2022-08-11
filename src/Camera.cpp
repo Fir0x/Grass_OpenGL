@@ -29,14 +29,15 @@ namespace GLEngine
 		m_up = glm::normalize(glm::cross(m_right, m_forward));
 	}
 
-	void Camera::translate(glm::vec3 trans)
+	void Camera::translate(const glm::vec3 &trans)
 	{
 		m_pos += trans;
+		m_processView = true;
 	}
 
 	void Camera::translate(float x, float y, float z)
 	{
-		m_pos += glm::vec3(x, y, z);
+		translate(glm::vec3(x, y, z));
 	}
 
 	void Camera::pitch(float angle)
