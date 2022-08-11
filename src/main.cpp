@@ -99,9 +99,9 @@ int main(void)
 
     glViewport(0, 0, 800, 600);
 
-    /*glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glDepthRange(0.0, 1.0);*/
+    glDepthRange(0.0, 1.0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
@@ -131,7 +131,7 @@ int main(void)
             shader.setUniformMatrix4f("projectionMatrix", mainCamera.getProjectionMatrix());
             shader.setUniformMatrix4f("viewMatrix", mainCamera.getViewMatrix());
 
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             for (const auto& obj : toRender)
             {
