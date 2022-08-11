@@ -8,27 +8,32 @@
 #include "Camera.h"
 #include "Object.h"
 
-
-
 static float lastFrameTime = 0;
 static GLEngine::Camera mainCamera;
 
 static void processInput(GLFWwindow* window)
 {
     static float speed = 2.5f;
+    static glm::vec3 worldUp(0.0f, 1.0f, 0.0f);
 
     float currentFrameTime = glfwGetTime();
     float deltaTime = currentFrameTime - lastFrameTime;
     lastFrameTime = currentFrameTime;
 
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+    // GLFW keys match position on a WASD layout,
+    // not the actual keyboard layout.
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         mainCamera.translate(mainCamera.forward() * speed * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         mainCamera.translate(-mainCamera.forward() * speed * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         mainCamera.translate(mainCamera.right() * speed * deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         mainCamera.translate(-mainCamera.right() * speed * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        mainCamera.translate(worldUp * speed * deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        mainCamera.translate(-worldUp * speed * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
@@ -51,7 +56,7 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.1f;
+    float sensitivity = 0.07f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
