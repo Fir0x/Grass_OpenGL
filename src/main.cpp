@@ -131,13 +131,13 @@ int main(void)
 
         std::vector<GLEngine::Object*> toRender;
 
-        auto meshes = GLEngine::loadOBJ("meshes\\cylinder.obj");
+        auto meshes = GLEngine::loadOBJ("meshes\\suzanne_smooth.obj");
         for (const auto& mesh : meshes)
         {
             toRender.push_back(new GLEngine::Object(mesh));
         }
 
-        GLEngine::Shader shader("base.glsl");
+        GLEngine::Shader shader("debug_lighting.glsl");
         shader.use();
 
         while (!glfwWindowShouldClose(window))

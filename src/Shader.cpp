@@ -139,6 +139,12 @@ namespace GLEngine
 		GL_CALL(glUseProgram(m_id));
 	}
 
+	void Shader::setUniform1i(const char* name, int v0)
+	{
+		int location = getUniformLocation(name);
+		GL_CALL(glUniform1i(location, v0));
+	}
+
 	void Shader::setUniform3f(const char* name, float v0, float v1, float v2)
 	{
 		int location = getUniformLocation(name);
