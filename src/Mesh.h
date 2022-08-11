@@ -58,5 +58,12 @@ namespace GLEngine
 
 		int triangleCount() const;
 		const std::vector<unsigned int>& getIndices() const;
+
+		/// <summary>
+		/// Write buffer representation as an OBJ file.
+		/// Used to check if buffer is well encoded.
+		/// </summary>
+		/// <param name="path"></param>
+		void writeBufferAsOBJ(const char* path);
 	};
 }

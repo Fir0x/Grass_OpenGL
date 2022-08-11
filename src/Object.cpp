@@ -1,6 +1,7 @@
 #include "Object.h"
 
 #include <GL/glew.h>
+
 #include "glError.h"
 
 namespace GLEngine

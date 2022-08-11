@@ -29,9 +29,9 @@ namespace GLEngine
 		Mesh currentMesh;
 		std::vector<Mesh> meshes;
 
-		std::vector<float> vertices;
-		std::vector<float> uvs;
-		std::vector<float> normals;
+		std::vector<Mesh::Vertex> vertices;
+		std::vector<Mesh::UV> uvs;
+		std::vector<Mesh::Normal> normals;
 		std::map<int, std::map<int, int>> indexMapper;
 		bool pushMesh = false;
 
@@ -61,20 +61,26 @@ namespace GLEngine
 				{
 					if (line[1] == 't')
 					{
-						uvs.push_back(std::stof(splitted[1]));
-						uvs.push_back(std::stof(splitted[2]));
+						uvs.push_back({
+							std::stof(splitted[1]),
+							std::stof(splitted[2])
+							});
 					}
 					else if (line[1] == 'n')
 					{
-						normals.push_back(std::stof(splitted[1]));
-						normals.push_back(std::stof(splitted[2]));
-						normals.push_back(std::stof(splitted[3]));
+						normals.push_back({
+							std::stof(splitted[1]),
+							std::stof(splitted[2]),
+							std::stof(splitted[3])
+							});
 					}
 					else
 					{
-						vertices.push_back(std::stof(splitted[1]));
-						vertices.push_back(std::stof(splitted[2]));
-						vertices.push_back(std::stof(splitted[3]));
+						vertices.push_back({
+							std::stof(splitted[1]),
+							std::stof(splitted[2]),
+							std::stof(splitted[3])
+							});
 					}
 				}
 				else if (line[0] == 'f')
@@ -82,9 +88,9 @@ namespace GLEngine
 					for (int i = 1; i < 4; i++)
 					{
 						auto indices = splitstr(splitted[i], '/');
-						int vertIdx = std::stoi(indices[0]);
-						int uvIdx = std::stoi(indices[1]);
-						int normIdx = std::stoi(indices[2]);
+						int vertIdx = std::stoi(indices[0]) - 1;
+						int uvIdx = std::stoi(indices[1]) - 1;
+						int normIdx = std::stoi(indices[2]) - 1;
 						if (indexMapper.find(vertIdx) == indexMapper.end())
 						{
 							indexMapper.insert({ vertIdx, std::map<int, int>() });
@@ -92,9 +98,9 @@ namespace GLEngine
 
 						if (indexMapper[vertIdx].find(normIdx) == indexMapper[vertIdx].end())
 						{
-							Mesh::Vertex v = { vertices.at(vertIdx), vertices.at(vertIdx + 1), vertices.at(vertIdx + 2) };
-							Mesh::UV uv = { uvs.at(uvIdx), uvs.at(uvIdx + 1) };
-							Mesh::Normal n = { normals.at(normIdx), normals.at(normIdx + 1), normals.at(normIdx + 2) };
+							Mesh::Vertex v = vertices.at(vertIdx);
+							Mesh::UV uv = uvs.at(uvIdx);
+							Mesh::Normal n = normals.at(normIdx);
 							indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, uv, n) });
 						}
 						else

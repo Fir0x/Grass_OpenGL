@@ -2,8 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "IndexBuffer.h"
-#include "VertexArray.h"
 #include "Shader.h"
 #include "glError.h"
 #include "objLoader.h"
@@ -108,7 +106,7 @@ int main(void)
 
         std::vector<GLEngine::Object*> toRender;
 
-        auto meshes = GLEngine::loadOBJ("C:\\Users\\Firox\\Desktop\\cube.obj");
+        auto meshes = GLEngine::loadOBJ("meshes\\cube.obj");
         for (const auto& mesh : meshes)
         {
             toRender.push_back(new GLEngine::Object(mesh));
