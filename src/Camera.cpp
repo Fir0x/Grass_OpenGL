@@ -1,6 +1,7 @@
 #include "Camera.h"
 
 #include <glm/ext.hpp>
+#include <iostream>
 
 namespace GLEngine
 {
@@ -110,5 +111,10 @@ namespace GLEngine
 	glm::mat4 Camera::getProjectionMatrix()
 	{
 		return m_projMat;
+	}
+
+	void Camera::onScreenSizeChange(int w, int h)
+	{
+		m_projMat = glm::perspective(45.0f, (float)w / (float)h, 0.1f, 100.0f);
 	}
 }

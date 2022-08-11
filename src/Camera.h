@@ -56,6 +56,8 @@ namespace GLEngine
 
 		glm::mat4 getViewMatrix();
 		glm::mat4 getProjectionMatrix();
+
+		void onScreenSizeChange(int w, int h);
 	};
 }
 

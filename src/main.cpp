@@ -11,6 +11,11 @@
 
 static float lastFrameTime = 0;
 static GLEngine::Camera mainCamera;
+static struct Settings
+{
+    unsigned int screen_width = 800;
+    unsigned int screen_height = 600;
+} settings;
 
 static void processInput(GLFWwindow* window)
 {
@@ -64,6 +69,14 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     mainCamera.rotate(yoffset, xoffset);
 }
 
+static void screen_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    mainCamera.onScreenSizeChange(width, height);
+    settings.screen_width = width;
+    settings.screen_height = height;
+}
+
 int main(void)
 {
     GLFWwindow* window;
@@ -77,7 +90,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create a windowed mode window and its OpenGL context
-    window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(settings.screen_width, settings.screen_height, "GLEngine", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -97,7 +110,7 @@ int main(void)
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, settings.screen_width, settings.screen_height);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -110,8 +123,11 @@ int main(void)
     {
         glfwSetCursorPosCallback(window, mouse_callback);
 
-        mainCamera = GLEngine::Camera(glm::perspective(45.0f, 800.0f/600.0f, 0.1f, 100.0f),
+        float aspectRatio = (float) settings.screen_width / settings.screen_height;
+        mainCamera = GLEngine::Camera(glm::perspective(45.0f, aspectRatio, 0.1f, 100.0f),
             glm::vec3(0.0f, 0.0f, 5.0f));
+
+        glfwSetFramebufferSizeCallback(window, screen_size_callback);
 
         std::vector<GLEngine::Object*> toRender;
 
