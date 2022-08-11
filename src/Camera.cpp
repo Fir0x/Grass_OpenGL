@@ -4,7 +4,18 @@
 
 namespace GLEngine
 {
+	Camera::Camera(glm::mat4 frustum, glm::vec3 pos, float yaw, float pitch, glm::vec3 worldUp, float speed)
+	{
+		initialize(frustum, pos, yaw, pitch, worldUp, speed);
+	}
+
 	Camera::Camera(glm::vec3 pos, float yaw, float pitch, glm::vec3 worldUp, float speed)
+	{
+		initialize(glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 100.0f), pos, yaw, pitch, worldUp, speed);
+	}
+
+
+	void Camera::initialize(glm::mat4 frustum, glm::vec3 pos, float yaw, float pitch, glm::vec3 worldUp, float speed)
 	{
 		m_pos = pos;
 
@@ -14,7 +25,7 @@ namespace GLEngine
 
 		updateVectors();
 
-		m_projMat = glm::transpose(glm::frustum(-0.05, 0.05, -0.05, 0.05, 0.5, 100.0));
+		m_projMat = frustum;
 	}
 
 	void Camera::updateVectors()

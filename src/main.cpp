@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/ext.hpp>
 #include <iostream>
 
 #include "Shader.h"
@@ -76,7 +77,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create a windowed mode window and its OpenGL context
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -96,6 +97,8 @@ int main(void)
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
+    glViewport(0, 0, 800, 600);
+
     /*glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glDepthRange(0.0, 1.0);*/
@@ -107,7 +110,8 @@ int main(void)
     {
         glfwSetCursorPosCallback(window, mouse_callback);
 
-        mainCamera = GLEngine::Camera(glm::vec3(0.0f, 0.0f, 20.0f));
+        mainCamera = GLEngine::Camera(glm::perspective(45.0f, 800.0f/600.0f, 0.1f, 100.0f),
+            glm::vec3(0.0f, 0.0f, 5.0f));
 
         std::vector<GLEngine::Object*> toRender;
 

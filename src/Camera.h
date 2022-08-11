@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 namespace GLEngine
 {
@@ -25,10 +26,20 @@ namespace GLEngine
 		void pitch(float angle);
 		void yaw(float angle);
 
+		void initialize(glm::mat4 frustum, glm::vec3 pos, float yaw,
+			float pitch, glm::vec3 worldUp, float speed);
+
 		void updateVectors();
 
 	public:
-		Camera(glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f),
+		Camera(glm::mat4 frustum = glm::perspective(45.0f, 16.0f / 9.0f, 0.1f, 100.0f),
+			glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f),
+			float yaw = -90.0f,
+			float pitch = 0.0f,
+			glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f),
+			float speed = 2.5f);
+
+		Camera(glm::vec3 pos,
 			float yaw = -90.0f,
 			float pitch = 0.0f,
 			glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f),
