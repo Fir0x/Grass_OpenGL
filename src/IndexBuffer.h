@@ -6,15 +6,15 @@ namespace GLEngine
 	{
 	private:
 		unsigned int m_id;
-		size_t m_count;
+		int m_count;
 
 	public:
-		IndexBuffer(const unsigned int *indices, size_t count);
+		IndexBuffer(const unsigned int *indices, int count);
 		~IndexBuffer();
 
 		void bind() const;
 		void unbind() const;
 
-		size_t count() const;
+		int count() const;
 	};
 }

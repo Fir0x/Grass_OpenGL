@@ -26,10 +26,11 @@ namespace GLEngine
 		layout.Add<float>(3);
 		layout.Add<float>(2);
 		layout.Add<float>(3);
+		layout.Add<float>(3);
 
 		m_vao = new VertexArray(*m_vbo, layout);
 		auto& indices = mesh.getIndices();
-		m_ib = new IndexBuffer(indices.data(), indices.size());
+		m_ib = new IndexBuffer(indices.data(), (int)indices.size());
 	}
 
 	Object::~Object()

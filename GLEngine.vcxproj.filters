@@ -80,5 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="base.glsl" />
+    <None Include="debug_lighting.glsl" />
   </ItemGroup>
 </Project>

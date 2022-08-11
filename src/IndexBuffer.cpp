@@ -6,7 +6,7 @@
 
 namespace GLEngine
 {
-	IndexBuffer::IndexBuffer(const unsigned int* indices, size_t count)
+	IndexBuffer::IndexBuffer(const unsigned int* indices, int count)
 	{
 		m_count = count;
 
@@ -30,7 +30,7 @@ namespace GLEngine
 		GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	}
 
-	size_t IndexBuffer::count() const
+	int IndexBuffer::count() const
 	{
 		return m_count;
 	}

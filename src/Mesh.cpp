@@ -13,7 +13,7 @@ namespace GLEngine
 		m_normals.push_back(normal);
 		m_colors.push_back(color);
 
-		int index = m_vertices.size() - 1;
+		int index = (int)(m_vertices.size() - 1);
 		m_indices.push_back(index);
 
 		return index;

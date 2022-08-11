@@ -22,7 +22,7 @@ static void processInput(GLFWwindow* window)
     static float speed = 2.5f;
     static glm::vec3 worldUp(0.0f, 1.0f, 0.0f);
 
-    float currentFrameTime = glfwGetTime();
+    float currentFrameTime = (float)glfwGetTime();
     float deltaTime = currentFrameTime - lastFrameTime;
     lastFrameTime = currentFrameTime;
 
@@ -57,8 +57,8 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
         firstFocus = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    float xoffset = (float)(xpos - lastX);
+    float yoffset = (float)(lastY - ypos);
     lastX = xpos;
     lastY = ypos;
 
@@ -118,7 +118,7 @@ int main(void)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
-    glClearColor(0.4, 0.4, 0.4, 1.0);
+    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
     {
         glfwSetCursorPosCallback(window, mouse_callback);
@@ -146,7 +146,7 @@ int main(void)
 
             shader.setUniformMatrix4f("projectionMatrix", mainCamera.getProjectionMatrix());
             shader.setUniformMatrix4f("viewMatrix", mainCamera.getViewMatrix());
-            shader.setUniform3f("lightPos", 0.6, 3.0, 5.0);
+            shader.setUniform3f("lightPos", 0.6f, 3.0f, 5.0f);
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
