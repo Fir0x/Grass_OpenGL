@@ -131,7 +131,7 @@ int main(void)
 
         std::vector<GLEngine::Object*> toRender;
 
-        auto meshes = GLEngine::loadOBJ("meshes\\cube.obj");
+        auto meshes = GLEngine::loadOBJ("meshes\\cylinder.obj");
         for (const auto& mesh : meshes)
         {
             toRender.push_back(new GLEngine::Object(mesh));
@@ -146,6 +146,7 @@ int main(void)
 
             shader.setUniformMatrix4f("projectionMatrix", mainCamera.getProjectionMatrix());
             shader.setUniformMatrix4f("viewMatrix", mainCamera.getViewMatrix());
+            shader.setUniform3f("lightPos", 0.6, 3.0, 5.0);
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

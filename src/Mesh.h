@@ -28,10 +28,18 @@ namespace GLEngine
 			float z;
 		};
 
+		struct Color
+		{
+			float r;
+			float g;
+			float b;
+		};
+
 	private:
 		std::vector<Vertex> m_vertices;
 		std::vector<UV> m_uvs;
 		std::vector<Normal> m_normals;
+		std::vector<Color> m_colors;
 		std::vector<unsigned int> m_indices;
 
 	public:
@@ -41,8 +49,9 @@ namespace GLEngine
 		/// <param name="vertex"></param>
 		/// <param name="uv"></param>
 		/// <param name="normal"></param>
+		/// <param name="color"></param>
 		/// <returns>Index of the created vertex.</returns>
-		int addFaceVertex(Vertex vertex, UV uv, Normal normal);
+		int addFaceVertex(Vertex vertex, UV uv, Normal normal, Color color = { 1.0f, 1.0f, 1.0f });
 
 		/// <summary>
 		/// Reuse a vertex for a new face.
@@ -56,7 +65,7 @@ namespace GLEngine
 		/// <returns></returns>
 		float* generateBuffer(size_t &size) const;
 
-		int triangleCount() const;
+		size_t triangleCount() const;
 		const std::vector<unsigned int>& getIndices() const;
 
 		/// <summary>

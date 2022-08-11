@@ -6,11 +6,12 @@
 
 namespace GLEngine
 {
-	int Mesh::addFaceVertex(Vertex vertex, UV uv, Normal normal)
+	int Mesh::addFaceVertex(Vertex vertex, UV uv, Normal normal, Color color)
 	{
 		m_vertices.push_back(vertex);
 		m_uvs.push_back(uv);
 		m_normals.push_back(normal);
+		m_colors.push_back(color);
 
 		int index = m_vertices.size() - 1;
 		m_indices.push_back(index);
@@ -25,23 +26,24 @@ namespace GLEngine
 
 	float* Mesh::generateBuffer(size_t &size) const
 	{
-		size = m_vertices.size() * sizeof(float) * 8;
-		float* buffer = (float*)calloc(m_vertices.size() * 8, sizeof(float));
+		size = m_vertices.size() * sizeof(float) * 11;
+		float* buffer = (float*)malloc(size);
 		if (buffer == nullptr)
 			return nullptr;
 
 		float* head = buffer;
-		for (int i = 0; i < m_vertices.size(); i++, head += 8)
+		for (int i = 0; i < m_vertices.size(); i++, head += 11)
 		{
 			*((Vertex*)head) = m_vertices[i];
 			*((UV*)(head + 3)) = m_uvs[i];
 			*((Normal*)(head + 5)) = m_normals[i];
+			*((Color*)(head + 8)) = m_colors[i];
 		}
 
 		return buffer;
 	}
 
-	int Mesh::triangleCount() const
+	size_t Mesh::triangleCount() const
 	{
 		return m_indices.size() / 3;
 	}

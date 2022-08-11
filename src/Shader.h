@@ -29,6 +29,7 @@ namespace GLEngine
 
 		void use();
 
+		void setUniform3f(const char* name, float v0, float v1, float v2);
 		void setUniform4f(const char* name, float v0, float v1, float v2, float v3);
 		void setUniformMatrix4f(const char* name, glm::mat4 matrix, bool transpose = false);
 	};
