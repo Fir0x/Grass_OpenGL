@@ -21,22 +21,78 @@ namespace GLEngine
 		return splitted;
 	}
 
-	std::vector<Mesh> loadOBJ(const char* path)
+	struct Material
+	{
+		std::string name;
+		Mesh::Color diffuse;
+	};
+
+	static std::map<std::string, Material> loadMtl(const std::string &path)
+	{
+		std::map<std::string, Material> lib;
+
+		std::ifstream stream;
+		stream.open(path);
+		bool pushMtl = false;
+		Material currentMtl;
+
+		if (stream.is_open())
+		{
+			std::string line;
+			while (std::getline(stream, line))
+			{
+				if (line[0] == '#' || line.empty())
+					continue;
+
+				auto splitted = splitstr(line, ' ');
+				const std::string &tag = splitted[0];
+				if (tag == "newmtl")
+				{
+					if (pushMtl)
+					{
+						lib.insert({ currentMtl.name, currentMtl });
+						currentMtl = {};
+					}
+					else
+						pushMtl = true;
+
+					currentMtl.name = splitted[1];
+				}
+				else if (tag == "Kd")
+				{
+					currentMtl.diffuse.r = std::stof(splitted[1]);
+					currentMtl.diffuse.g = std::stof(splitted[2]);
+					currentMtl.diffuse.b = std::stof(splitted[3]);
+				}
+			}
+
+			lib.insert({ currentMtl.name, currentMtl });
+		}
+
+		return lib;
+	}
+
+	std::vector<Mesh> loadOBJ(const std::string &path)
 	{
 		std::ifstream stream;
 		stream.open(path);
 
-		Mesh currentMesh;
 		std::vector<Mesh> meshes;
-
-		std::vector<Mesh::Vertex> vertices;
-		std::vector<Mesh::UV> uvs;
-		std::vector<Mesh::Normal> normals;
-		std::map<int, std::map<int, int>> indexMapper;
-		bool pushMesh = false;
 
 		if (stream.is_open())
 		{
+			Mesh currentMesh;
+
+			std::vector<Mesh::Vertex> vertices;
+			std::vector<Mesh::UV> uvs;
+			std::vector<Mesh::Normal> normals;
+			std::map<int, std::map<int, int>> indexMapper;
+			std::map<std::string, Material> mtllib;
+			bool pushMesh = false;
+			bool useMtl = false;
+			Material currentMtl;
+
+			std::string folder = path.substr(0, path.find_last_of('\\') + 1);
 			std::string line;
 			while (std::getline(stream, line))
 			{
@@ -101,13 +157,30 @@ namespace GLEngine
 							Mesh::Vertex v = vertices.at(vertIdx);
 							Mesh::UV uv = uvs.at(uvIdx);
 							Mesh::Normal n = normals.at(normIdx);
-							indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, uv, n) });
+							if (useMtl)
+							{
+								Mesh::Color color = currentMtl.diffuse;
+								indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, uv, n, color) });
+							}
+							else
+							{
+								indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, uv, n) });
+							}
 						}
 						else
 						{
 							currentMesh.addFaceVertex(indexMapper[vertIdx][normIdx]);
 						}
 					}
+				}
+				else if (splitted[0] == "mtllib")
+				{
+					mtllib = loadMtl(folder + splitted[1]);
+				}
+				else if (splitted[0] == "usemtl")
+				{
+					currentMtl = mtllib[splitted[1]];
+					useMtl = true;
 				}
 			}
 
