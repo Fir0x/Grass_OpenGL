@@ -25,10 +25,16 @@ void main()
 
 layout(location=0) out vec4 output_color;
 
+uniform vec3 lightColor;
+uniform float ambientStrength;
+
 in vec3 fColor;
 in float lightCos;
 
 void main()
 {
-	output_color = vec4(fColor * max(lightCos, 0.0), 1.0);
+	vec3 ambient = ambientStrength * lightColor * fColor;
+	vec3 diffuse = fColor * max(lightCos, 0.0);
+	vec3 color = clamp(ambient + diffuse, 0.0, 1.0);
+	output_color = vec4(color, 1.0);
 }
