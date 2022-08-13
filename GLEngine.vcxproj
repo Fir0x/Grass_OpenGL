@@ -181,8 +181,8 @@
     <ClInclude Include="src\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="base.glsl" />
-    <None Include="debug_lighting.glsl" />
+    <None Include="shaders\core\base.glsl" />
+    <None Include="shaders\debug\debug_lighting.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

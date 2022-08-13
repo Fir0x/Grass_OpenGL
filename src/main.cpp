@@ -136,7 +136,7 @@ int main(void)
             toRender.push_back(new GLEngine::Object(mesh));
         }
 
-        GLEngine::Shader shader("base.glsl");
+        GLEngine::Shader shader("shaders\\core\\base.glsl");
         shader.use();
 
         while (!glfwWindowShouldClose(window))
