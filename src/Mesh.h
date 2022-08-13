@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
 
 namespace GLEngine
 {
@@ -74,5 +75,7 @@ namespace GLEngine
 		/// </summary>
 		/// <param name="path"></param>
 		void writeBufferAsOBJ(const char* path);
+
+		static std::vector<Mesh> loadOBJFile(const std::string& path);
 	};
 }

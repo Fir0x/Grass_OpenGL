@@ -5,7 +5,6 @@
 
 #include "Shader.h"
 #include "glError.h"
-#include "objLoader.h"
 #include "Camera.h"
 #include "Object.h"
 
@@ -131,7 +130,7 @@ int main(void)
 
         std::vector<GLEngine::Object*> toRender;
 
-        auto meshes = GLEngine::loadOBJ("meshes\\cylinder.obj");
+        auto meshes = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj");
         for (const auto& mesh : meshes)
         {
             toRender.push_back(new GLEngine::Object(mesh));
