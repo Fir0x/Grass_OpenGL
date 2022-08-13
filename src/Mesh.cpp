@@ -203,9 +203,7 @@ namespace GLEngine
 						currentMesh = Mesh();
 					}
 					else
-					{
 						pushMesh = true;
-					}
 				}
 				else if (line[0] == 'v')
 				{
@@ -282,6 +280,10 @@ namespace GLEngine
 			{
 				meshes.push_back(currentMesh);
 			}
+		}
+		else
+		{
+			std::cerr << "Failed to open OBJ file at " << path << "\n";
 		}
 
 		return meshes;
