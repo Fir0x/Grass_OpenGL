@@ -112,7 +112,7 @@ namespace GLEngine
 			char* log;
 			GL_CALL(glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &log_size));
 
-			log = (char*)std::malloc(log_size + 1); /* +1 pour le caractere de fin de chaine '\0' */
+			log = (char*)std::malloc((size_t)log_size + 1);
 			if (log != nullptr) {
 				GL_CALL(glGetProgramInfoLog(m_id, log_size, &log_size, log));
 				std::cerr << "Failed to link program.\n" << log << std::endl;
