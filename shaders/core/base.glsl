@@ -36,9 +36,11 @@ in vec3 fragNormal;
 
 void main()
 {
+	vec3 ambient = ambientStrength * lightColor;
+
 	float lightCos = dot(fragNormal, normalize(lightPos - worldPos));
-	vec3 ambient = ambientStrength * lightColor * fragColor;
-	vec3 diffuse = fragColor * max(lightCos, 0.0);
-	vec3 color = clamp(ambient + diffuse, 0.0, 1.0);
+	vec3 diffuse = max(lightCos, 0.0) * lightColor;
+
+	vec3 color = (ambient + diffuse) * fragColor;
 	output_color = vec4(color, 1.0);
 }
