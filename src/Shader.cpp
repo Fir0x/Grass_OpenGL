@@ -163,6 +163,12 @@ namespace GLEngine
 		GL_CALL(glUniform4f(location, v0, v1, v2, v3));
 	}
 
+	void Shader::setUniformMatrix3f(const char* name, glm::mat3 matrix, bool transpose)
+	{
+		int location = getUniformLocation(name);
+		GL_CALL(glUniformMatrix3fv(location, 1, transpose ? GL_TRUE : GL_FALSE, glm::value_ptr(matrix)));
+	}
+
 	void Shader::setUniformMatrix4f(const char* name, glm::mat4 matrix, bool transpose)
 	{
 		int location = getUniformLocation(name);

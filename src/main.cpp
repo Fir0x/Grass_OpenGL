@@ -76,6 +76,11 @@ static void screen_size_callback(GLFWwindow* window, int width, int height)
     settings.screen_height = height;
 }
 
+static glm::mat3 processNormalMatrix(const glm::mat4& model)
+{
+    return glm::mat3(glm::transpose(glm::inverse(model)));
+}
+
 int main(void)
 {
     GLFWwindow* window;
@@ -155,6 +160,7 @@ int main(void)
             for (const auto& obj : toRender)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
+                shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(obj->getModelMatrix()));
                 obj->draw();
             }
 

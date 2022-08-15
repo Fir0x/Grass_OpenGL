@@ -9,6 +9,7 @@ layout(location=3) in vec3 color;
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
+uniform mat3 normalMatrix;
 
 out vec3 fragColor;
 out vec3 worldPos;
@@ -19,7 +20,7 @@ void main()
 	worldPos = vec3(modelMatrix * vec4(position, 1.0));
 	gl_Position = projectionMatrix * viewMatrix * vec4(worldPos, 1.0);
 	fragColor = color;
-	fragNormal = normal;
+	fragNormal = normalMatrix * normal;
 }
 
 #shader fragment
