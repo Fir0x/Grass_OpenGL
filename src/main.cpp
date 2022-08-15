@@ -153,7 +153,7 @@ int main(void)
             shader.setUniform3f("lightPos", 1.2f, 1.0f, 2.0f);
             shader.setUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
             shader.setUniform1f("ambientStrength", 0.1f);
-            shader.setUniform3f("viewPos", mainCamera.getPosition().x, mainCamera.getPosition().y, mainCamera.getPosition().z);
+            shader.setUniform3f("viewPos", mainCamera.getPosition());
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
