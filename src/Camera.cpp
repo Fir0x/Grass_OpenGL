@@ -113,6 +113,11 @@ namespace GLEngine
 		return m_projMat;
 	}
 
+	glm::vec3 Camera::getPosition()
+	{
+		return m_pos;
+	}
+
 	void Camera::onScreenSizeChange(int w, int h)
 	{
 		m_projMat = glm::perspective(45.0f, (float)w / (float)h, 0.1f, 100.0f);

@@ -145,9 +145,10 @@ int main(void)
 
             shader.setUniformMatrix4f("projectionMatrix", mainCamera.getProjectionMatrix());
             shader.setUniformMatrix4f("viewMatrix", mainCamera.getViewMatrix());
-            shader.setUniform3f("lightPos", 0.6f, 3.0f, 5.0f);
+            shader.setUniform3f("lightPos", 1.2f, 1.0f, 2.0f);
             shader.setUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
             shader.setUniform1f("ambientStrength", 0.1f);
+            shader.setUniform3f("viewPos", mainCamera.getPosition().x, mainCamera.getPosition().y, mainCamera.getPosition().z);
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
