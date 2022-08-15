@@ -28,6 +28,8 @@ namespace GLEngine
 		Object(const Mesh& mesh);
 		~Object();
 
+		glm::mat4 getModelMatrix() const;
+
 		void draw() const;
 	};
 }

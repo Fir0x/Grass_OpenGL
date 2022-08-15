@@ -154,6 +154,7 @@ int main(void)
 
             for (const auto& obj : toRender)
             {
+                shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
                 obj->draw();
             }
 
