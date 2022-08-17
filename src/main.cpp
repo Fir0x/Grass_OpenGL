@@ -7,6 +7,7 @@
 #include "glError.h"
 #include "Camera.h"
 #include "Object.h"
+#include "Texture.h"
 
 static float lastFrameTime = 0;
 static GLEngine::Camera mainCamera;
@@ -134,8 +135,8 @@ int main(void)
         glfwSetFramebufferSizeCallback(window, screen_size_callback);
 
         std::vector<GLEngine::Object*> toRender;
-
-        auto meshes = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj");
+        GLEngine::TextureManager texManager;
+        auto meshes = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj", texManager);
         for (const auto& mesh : meshes)
         {
             toRender.push_back(new GLEngine::Object(mesh));
@@ -143,6 +144,7 @@ int main(void)
 
         GLEngine::Shader shader("shaders\\core\\base.glsl");
         shader.use();
+        glm::vec3 white(1.0f);
 
         while (!glfwWindowShouldClose(window))
         {
@@ -161,6 +163,11 @@ int main(void)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
                 shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(obj->getModelMatrix(), mainCamera.getViewMatrix()));
+                shader.setUniform3f("material.ambient", white);
+                shader.setUniform3f("material.diffuse", white);
+                shader.setUniform3f("material.specular", white);
+                texManager.getDefaultTexture()->bindToUnit(0);
+                shader.setUniform1i("diffuseTex", 0);
                 obj->draw();
             }
 

@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "Texture.h"
+
 namespace GLEngine
 {
 	class Mesh
@@ -11,48 +13,24 @@ namespace GLEngine
 	public:
 		struct Vertex
 		{
-			float x;
-			float y;
-			float z;
-		};
-
-		struct UV
-		{
-			float u;
-			float v;
-		};
-
-		struct Normal
-		{
-			float x;
-			float y;
-			float z;
-		};
-
-		struct Color
-		{
-			float r;
-			float g;
-			float b;
+			glm::vec3 coords;
+			glm::vec3 normals;
+			glm::vec2 uvs;
 		};
 
 	private:
 		std::vector<Vertex> m_vertices;
-		std::vector<UV> m_uvs;
-		std::vector<Normal> m_normals;
-		std::vector<Color> m_colors;
 		std::vector<unsigned int> m_indices;
 
 	public:
 		/// <summary>
 		/// Add a new vertex to the mesh.
 		/// </summary>
-		/// <param name="vertex"></param>
-		/// <param name="uv"></param>
-		/// <param name="normal"></param>
-		/// <param name="color"></param>
+		/// <param name="coords"></param>
+		/// <param name="normals"></param>
+		/// <param name="uvs"></param>
 		/// <returns>Index of the created vertex.</returns>
-		int addFaceVertex(Vertex vertex, UV uv, Normal normal, Color color = { 1.0f, 1.0f, 1.0f });
+		int addFaceVertex(glm::vec3 coords, glm::vec3 normals, glm::vec2 uvs);
 
 		/// <summary>
 		/// Reuse a vertex for a new face.
@@ -76,6 +54,6 @@ namespace GLEngine
 		/// <param name="path"></param>
 		void writeBufferAsOBJ(const char* path);
 
-		static std::vector<Mesh> loadOBJFile(const std::string& path);
+		static std::vector<Mesh> loadOBJFile(const std::string& path, TextureManager& texManager);
 	};
 }

@@ -6,14 +6,13 @@
 #include <map>
 #include <sstream>
 
+#include "Material.h"
+
 namespace GLEngine
 {
-	int Mesh::addFaceVertex(Vertex vertex, UV uv, Normal normal, Color color)
+	int Mesh::addFaceVertex(glm::vec3 coords, glm::vec3 normals, glm::vec2 uvs)
 	{
-		m_vertices.push_back(vertex);
-		m_uvs.push_back(uv);
-		m_normals.push_back(normal);
-		m_colors.push_back(color);
+		m_vertices.push_back({ coords, normals, uvs });
 
 		int index = (int)(m_vertices.size() - 1);
 		m_indices.push_back(index);
@@ -37,9 +36,6 @@ namespace GLEngine
 		for (int i = 0; i < m_vertices.size(); i++, head += 11)
 		{
 			*((Vertex*)head) = m_vertices[i];
-			*((UV*)(head + 3)) = m_uvs[i];
-			*((Normal*)(head + 5)) = m_normals[i];
-			*((Color*)(head + 8)) = m_colors[i];
 		}
 
 		return buffer;
@@ -115,20 +111,14 @@ namespace GLEngine
 		return splitted;
 	}
 
-	struct Material
-	{
-		std::string name;
-		Mesh::Color diffuse;
-	};
-
-	static std::map<std::string, Material> loadMtl(const std::string& path)
+	static std::map<std::string, Material> loadMtl(const std::string& path, TextureManager &texManager)
 	{
 		std::map<std::string, Material> lib;
 
 		std::ifstream stream;
 		stream.open(path);
 		bool pushMtl = false;
-		Material currentMtl;
+		MaterialFactory matFactory;
 
 		if (stream.is_open())
 		{
@@ -144,29 +134,49 @@ namespace GLEngine
 				{
 					if (pushMtl)
 					{
-						lib.insert({ currentMtl.name, currentMtl });
-						currentMtl = {};
+						Material mat = matFactory.generateMaterial(texManager);
+						lib.insert({ mat.name, mat });
+						matFactory.reset();
 					}
 					else
 						pushMtl = true;
 
-					currentMtl.name = splitted[1];
+					matFactory.setName(splitted[1]);
+				}
+				else if (tag == "Ka")
+				{
+					glm::vec3 ambient;
+					ambient.r = std::stof(splitted[1]);
+					ambient.g = std::stof(splitted[2]);
+					ambient.b = std::stof(splitted[3]);
+					matFactory.setAmbient(ambient);
 				}
 				else if (tag == "Kd")
 				{
-					currentMtl.diffuse.r = std::stof(splitted[1]);
-					currentMtl.diffuse.g = std::stof(splitted[2]);
-					currentMtl.diffuse.b = std::stof(splitted[3]);
+					glm::vec3 diffuse;
+					diffuse.r = std::stof(splitted[1]);
+					diffuse.g = std::stof(splitted[2]);
+					diffuse.b = std::stof(splitted[3]);
+					matFactory.setDiffuse(diffuse);
+				}
+				else if (tag == "Ks")
+				{
+					glm::vec3 specular;
+					specular.r = std::stof(splitted[1]);
+					specular.g = std::stof(splitted[2]);
+					specular.b = std::stof(splitted[3]);
+					matFactory.setSpecular(specular);
 				}
 			}
 
-			lib.insert({ currentMtl.name, currentMtl });
+			Material mat = matFactory.generateMaterial(texManager);
+			lib.insert({ mat.name, mat });
 		}
 
 		return lib;
 	}
 
-	std::vector<Mesh> Mesh::loadOBJFile(const std::string& path)
+	std::vector<Mesh> Mesh::loadOBJFile(const std::string& path, TextureManager &texManager)
 	{
 		std::ifstream stream;
 		stream.open(path);
@@ -177,10 +187,11 @@ namespace GLEngine
 		{
 			Mesh currentMesh;
 
-			std::vector<Mesh::Vertex> vertices;
-			std::vector<Mesh::UV> uvs;
-			std::vector<Mesh::Normal> normals;
+			std::vector<glm::vec3> vertices;
+			std::vector<glm::vec3> normals;
+			std::vector<glm::vec2> uvs;
 			std::map<int, std::map<int, int>> indexMapper;
+
 			std::map<std::string, Material> mtllib;
 			bool pushMesh = false;
 			bool useMtl = false;
@@ -246,18 +257,10 @@ namespace GLEngine
 
 						if (indexMapper[vertIdx].find(normIdx) == indexMapper[vertIdx].end())
 						{
-							Mesh::Vertex v = vertices.at(vertIdx);
-							Mesh::UV uv = uvs.at(uvIdx);
-							Mesh::Normal n = normals.at(normIdx);
-							if (useMtl)
-							{
-								Mesh::Color color = currentMtl.diffuse;
-								indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, uv, n, color) });
-							}
-							else
-							{
-								indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, uv, n) });
-							}
+							glm::vec3 v = vertices.at(vertIdx);
+							glm::vec3 n = normals.at(normIdx);
+							glm::vec2 uv = uvs.at(uvIdx);
+							indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, n, uv) });
 						}
 						else
 						{
@@ -267,7 +270,7 @@ namespace GLEngine
 				}
 				else if (splitted[0] == "mtllib")
 				{
-					mtllib = loadMtl(folder + splitted[1]);
+					mtllib = loadMtl(folder + splitted[1], texManager);
 				}
 				else if (splitted[0] == "usemtl")
 				{

@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+#include "Material.h"
 #include "Mesh.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
@@ -16,6 +17,7 @@ namespace GLEngine
 		float* m_renderBuffer;
 		size_t m_renderBuffSize;
 		glm::vec3 m_pos;
+		const Material* m_material;
 
 		VertexBuffer* m_vbo;
 		VertexArray* m_vao;
@@ -24,7 +26,7 @@ namespace GLEngine
 		void initializeRender(const Mesh &mesh);
 
 	public:
-		Object(glm::vec3 pos, const Mesh &mesh);
+		Object(glm::vec3 pos, const Mesh &mesh, const Material* material);
 		Object(const Mesh& mesh);
 		~Object();
 

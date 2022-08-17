@@ -7,9 +7,10 @@
 
 namespace GLEngine
 {
-	Object::Object(glm::vec3 pos, const Mesh& mesh)
+	Object::Object(glm::vec3 pos, const Mesh& mesh, const Material* material)
 	{
 		m_pos = pos;
+		m_material = material;
 		initializeRender(mesh);
 	}
 
