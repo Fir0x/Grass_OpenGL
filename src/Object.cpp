@@ -26,9 +26,8 @@ namespace GLEngine
 		m_vbo = new VertexBuffer(m_renderBuffer, m_renderBuffSize);
 		VertexBufferLayout layout;
 		layout.Add<float>(3);
+		layout.Add<float>(3);
 		layout.Add<float>(2);
-		layout.Add<float>(3);
-		layout.Add<float>(3);
 
 		m_vao = new VertexArray(*m_vbo, layout);
 		auto& indices = mesh.getIndices();

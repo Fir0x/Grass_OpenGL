@@ -32,8 +32,8 @@ namespace GLEngine
 		if (buffer == nullptr)
 			return nullptr;
 
-		float* head = buffer;
-		for (int i = 0; i < m_vertices.size(); i++, head += 11)
+		Vertex* head = (Vertex*)buffer;
+		for (int i = 0; i < m_vertices.size(); i++, head++)
 		{
 			*((Vertex*)head) = m_vertices[i];
 		}
