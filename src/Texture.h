@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <set>
 #include <map>
+#include <vector>
 
 namespace GLEngine
 {
@@ -19,6 +19,7 @@ namespace GLEngine
 		~Texture();
 
 		unsigned int getId() const;
+		const std::string& getPath() const;
 
 		void bind() const;
 		void unbind() const;
@@ -29,12 +30,13 @@ namespace GLEngine
 	class TextureManager
 	{
 	private:
-		std::set<std::string> m_loadedPaths;
+		std::map<std::string, unsigned int> m_pathMapper;
 		std::map<unsigned int, Texture*> m_textures;
 		unsigned int m_defaultTexId;
 
 	public:
 		TextureManager();
+		~TextureManager();
 
 		unsigned int loadTexture(const std::string& path);
 		void deleteTexture(const unsigned int id);

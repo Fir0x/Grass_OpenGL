@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <iostream>
+#include <filesystem>
 
 #include "glError.h"
 
@@ -36,6 +38,11 @@ namespace GLEngine
 		return m_id;
 	}
 
+	const std::string& Texture::getPath() const
+	{
+		return m_path;
+	}
+
 	void Texture::bind() const
 	{
 		GL_CALL(glBindTexture(GL_TEXTURE_2D, m_id));
@@ -60,10 +67,34 @@ namespace GLEngine
 		m_textures.insert({ m_defaultTexId, defaultTex });
 	}
 
+	TextureManager::~TextureManager()
+	{
+		for (auto iter = m_textures.begin(); iter != m_textures.end(); iter++)
+			delete iter->second;
+	}
+
 	unsigned int TextureManager::loadTexture(const std::string& path)
 	{
-		// TODO
-		return 0;
+		auto absPath = std::filesystem::absolute(path).string();
+		if (m_pathMapper.find(absPath) != m_pathMapper.end())
+			return m_textures[m_pathMapper[absPath]]->getId();
+
+		int width, height, channels;
+		unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		if (data == nullptr)
+		{
+			std::cerr << "Failed to load texture at " << path << "\n";
+			return 0;
+		}
+
+		auto texture = new Texture(absPath, width, height, data);
+		auto texId = texture->getId();
+		m_pathMapper.insert({ absPath, texId });
+		m_textures.insert({ texId, texture });
+
+		stbi_image_free(data);
+
+		return texId;
 	}
 
 	void TextureManager::deleteTexture(const unsigned int id)
@@ -72,8 +103,13 @@ namespace GLEngine
 			return;
 
 		Texture* texture = m_textures.at(id);
-		m_textures.erase(id);
-		free(texture);
+		auto path = texture->getPath();
+		if (path != "$DEFAULT_TEX")
+		{
+			m_pathMapper.erase(path);
+			m_textures.erase(id);
+			free(texture);
+		}
 	}
 
 	const Texture* TextureManager::getTexture(const unsigned int id) const

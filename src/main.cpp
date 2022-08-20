@@ -136,6 +136,7 @@ int main(void)
 
         std::vector<GLEngine::Object*> toRender;
         GLEngine::TextureManager texManager;
+        auto texId = texManager.loadTexture("textures\\texture.jpg");
         auto meshes = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj", texManager);
         for (const auto& mesh : meshes)
         {
@@ -166,7 +167,7 @@ int main(void)
                 shader.setUniform3f("material.ambient", white);
                 shader.setUniform3f("material.diffuse", white);
                 shader.setUniform3f("material.specular", white);
-                texManager.getDefaultTexture()->bindToUnit(0);
+                texManager.getTexture(texId)->bindToUnit(0);
                 shader.setUniform1i("diffuseTex", 0);
                 obj->draw();
             }
