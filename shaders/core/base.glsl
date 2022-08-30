@@ -10,17 +10,15 @@ uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat3 normalMatrix;
 
-uniform sampler2D diffuseTex;
-
 out vec3 fragPos;
 out vec3 fragNormal;
-out vec3 fragColor;
+out vec2 fragUV;
 
 void main()
 {
 	fragPos = vec3(viewMatrix * modelMatrix * vec4(position, 1.0));
 	fragNormal = normalMatrix * normal;
-	fragColor = vec3(texture(diffuseTex, uv));
+	fragUV = uv;
 
 	gl_Position = projectionMatrix * vec4(fragPos, 1.0);
 }
@@ -44,12 +42,16 @@ uniform vec3 lightColor;
 uniform float ambientStrength;
 uniform mat4 viewMatrix;
 
-in vec3 fragColor;
+uniform sampler2D diffuseTex;
+
+in vec2 fragUV;
 in vec3 fragPos;
 in vec3 fragNormal;
 
 void main()
 {
+	vec3 fragColor = vec3(texture(diffuseTex, fragUV));
+
 	vec3 ambient = ambientStrength * lightColor;
 
 	vec3 normal = normalize(fragNormal);
