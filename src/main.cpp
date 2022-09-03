@@ -183,8 +183,14 @@ int main(void)
                 shader.setUniform3f("material.ambient", white);
                 shader.setUniform3f("material.diffuse", white);
                 shader.setUniform3f("material.specular", white);
+                shader.setUniform1f("material.shininess", 32.0f);
+                shader.setUniform3f("light.ambient", white * 0.05f);
+                shader.setUniform3f("light.diffuse", white);
+                shader.setUniform3f("light.specular", white * 0.5f);
                 texManager.getTexture(texId)->bindToUnit(0);
-                shader.setUniform1i("diffuseTex", 0);
+                shader.setUniform1i("material.diffuseTex", 0);
+                texManager.getDefaultTexture()->bindToUnit(1);
+                shader.setUniform1i("material.specularTex", 1);
                 obj->draw();
             }
 
