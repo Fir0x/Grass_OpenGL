@@ -190,7 +190,19 @@ namespace GLEngine
 			std::vector<glm::vec3> vertices;
 			std::vector<glm::vec3> normals;
 			std::vector<glm::vec2> uvs;
-			std::map<int, std::map<int, int>> indexMapper;
+
+			struct VertexInfo
+			{
+				int vertIdx;
+				int normIdx;
+				int uvIdx;
+
+				bool operator<(const VertexInfo & rhs) const
+				{
+					return std::tie(vertIdx, normIdx, uvIdx) < std::tie(rhs.vertIdx, rhs.normIdx, rhs.uvIdx);
+				}
+			};
+			std::map<VertexInfo, int> indexMapper;
 
 			std::map<std::string, Material> mtllib;
 			bool pushMesh = false;
@@ -250,21 +262,18 @@ namespace GLEngine
 						int vertIdx = std::stoi(indices[0]) - 1;
 						int uvIdx = std::stoi(indices[1]) - 1;
 						int normIdx = std::stoi(indices[2]) - 1;
-						if (indexMapper.find(vertIdx) == indexMapper.end())
-						{
-							indexMapper.insert({ vertIdx, std::map<int, int>() });
-						}
+						VertexInfo vInfo = { vertIdx, uvIdx, normIdx };
 
-						if (indexMapper[vertIdx].find(normIdx) == indexMapper[vertIdx].end())
+						if (indexMapper.find(vInfo) == indexMapper.end())
 						{
 							glm::vec3 v = vertices.at(vertIdx);
 							glm::vec3 n = normals.at(normIdx);
 							glm::vec2 uv = uvs.at(uvIdx);
-							indexMapper[vertIdx].insert({ normIdx, currentMesh.addFaceVertex(v, n, uv) });
+							indexMapper.insert({ vInfo, currentMesh.addFaceVertex(v, n, uv) });
 						}
 						else
 						{
-							currentMesh.addFaceVertex(indexMapper[vertIdx][normIdx]);
+							currentMesh.addFaceVertex(indexMapper[vInfo]);
 						}
 					}
 				}
