@@ -16,6 +16,8 @@ static struct Settings
     unsigned int screen_width = 800;
     unsigned int screen_height = 600;
 } settings;
+static bool mouseCamera = true;
+static bool firstFocus = true;
 
 static void processInput(GLFWwindow* window)
 {
@@ -40,16 +42,32 @@ static void processInput(GLFWwindow* window)
         mainCamera.translate(worldUp * speed * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         mainCamera.translate(-worldUp * speed * deltaTime);
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+        if (!mouseCamera)
+            firstFocus = true;
+
+        mouseCamera = true;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+    {
+        mouseCamera = false;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
 }
 
-static bool firstFocus = true;
 static double lastX;
 static double lastY;
 
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
+    if (!mouseCamera)
+        return;
+
     if (firstFocus)
     {
         lastX = xpos;
@@ -104,8 +122,6 @@ int main(void)
 
     // Make the window's context current
     glfwMakeContextCurrent(window);
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (glewInit() != GLEW_OK)
     {
