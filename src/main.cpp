@@ -180,7 +180,6 @@ int main(void)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
                 shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(obj->getModelMatrix(), mainCamera.getViewMatrix()));
-                shader.setUniform3f("material.ambient", white);
                 shader.setUniform3f("material.diffuse", white);
                 shader.setUniform3f("material.specular", white);
                 shader.setUniform1f("material.shininess", 32.0f);

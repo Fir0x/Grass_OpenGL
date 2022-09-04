@@ -28,7 +28,6 @@ void main()
 
 struct Material
 {
-	vec3 ambient;
 	vec3 diffuse;
 	sampler2D diffuseTex;
 	vec3 specular;
@@ -58,8 +57,6 @@ in vec3 fragNormal;
 
 void main()
 {
-	vec3 ambient = light.ambient * material.ambient;
-
 	vec3 normal = normalize(fragNormal);
 	vec3 lightDir = normalize(vec3(viewMatrix * vec4(lightPos, 1.0)) - fragPos);
 	float lightCos = dot(normal, lightDir);
@@ -72,6 +69,6 @@ void main()
 	vec3 mtlSpecular = vec3(texture(material.specularTex, fragUV)) * material.specular;
 	vec3 specular = light.specular * (spec * mtlSpecular);
 
-	vec3 color = ambient + diffuse + specular;
+	vec3 color = light.ambient + diffuse + specular;
 	output_color = vec4(color, 1.0);
 }
