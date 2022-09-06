@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Texture.h"
+#include "lights/DirectionalLight.h"
 
 static float lastFrameTime = 0;
 static GLEngine::Camera mainCamera;
@@ -162,6 +163,7 @@ int main(void)
         GLEngine::Shader shader("shaders\\core\\base.glsl");
         shader.use();
         glm::vec3 white(1.0f);
+        GLEngine::DirectionalLight light(white, glm::vec3(0.0f, -1.0f, 0.0f));
 
         while (!glfwWindowShouldClose(window))
         {
@@ -176,6 +178,7 @@ int main(void)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            light.SetupShaderProperties(shader);
             for (const auto& obj : toRender)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
@@ -183,9 +186,6 @@ int main(void)
                 shader.setUniform3f("material.diffuse", white);
                 shader.setUniform3f("material.specular", white);
                 shader.setUniform1f("material.shininess", 32.0f);
-                shader.setUniform3f("light.ambient", white * 0.05f);
-                shader.setUniform3f("light.diffuse", white);
-                shader.setUniform3f("light.specular", white * 0.5f);
                 texManager.getTexture(texId)->bindToUnit(0);
                 shader.setUniform1i("material.diffuseTex", 0);
                 texManager.getDefaultTexture()->bindToUnit(1);
