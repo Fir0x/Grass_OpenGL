@@ -164,6 +164,7 @@
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\lights\DirectionalLight.cpp" />
     <ClCompile Include="src\lights\Light.cpp" />
+    <ClCompile Include="src\lights\PointLight.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\lights\DirectionalLight.h" />
     <ClInclude Include="src\lights\Light.h" />
+    <ClInclude Include="src\lights\PointLight.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Object.h" />

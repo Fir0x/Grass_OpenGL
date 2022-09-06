@@ -9,6 +9,7 @@
 #include "Object.h"
 #include "Texture.h"
 #include "lights/DirectionalLight.h"
+#include "lights/PointLight.h"
 
 static float lastFrameTime = 0;
 static GLEngine::Camera mainCamera;
@@ -163,7 +164,8 @@ int main(void)
         GLEngine::Shader shader("shaders\\core\\base.glsl");
         shader.use();
         glm::vec3 white(1.0f);
-        GLEngine::DirectionalLight light(white, glm::vec3(0.0f, -1.0f, 0.0f));
+        GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));
+        GLEngine::PointLight pointLight(white, glm::vec3(-1.0f, -3.0f, 0.3f), 100);
 
         while (!glfwWindowShouldClose(window))
         {
@@ -178,7 +180,8 @@ int main(void)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            light.SetupShaderProperties(shader);
+            dirLight.SetupShaderProperties(shader);
+            pointLight.SetupShaderProperties(shader);
             for (const auto& obj : toRender)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
