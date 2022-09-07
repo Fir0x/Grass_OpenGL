@@ -13,13 +13,11 @@ uniform mat3 normalMatrix;
 out vec3 fragPos;
 out vec3 fragNormal;
 out vec2 fragUV;
-out mat3 viewMat;
 
 void main()
 {
 	fragPos = vec3(viewMatrix * modelMatrix * vec4(position, 1.0));
 	fragNormal = normalMatrix * normal;
-	viewMat = mat3(viewMatrix);
 	fragUV = uv;
 
 	gl_Position = projectionMatrix * vec4(fragPos, 1.0);
@@ -66,12 +64,11 @@ uniform mat4 viewMatrix;
 in vec2 fragUV;
 in vec3 fragPos;
 in vec3 fragNormal;
-flat in mat3 viewMat;
 
 vec3 processDirectionalLight(DirLight light)
 {
 	vec3 normal = normalize(fragNormal);
-	vec3 lightDir = viewMat * -light.direction;
+	vec3 lightDir = vec3(viewMatrix * vec4(-light.direction, 0.0));
 	float lightCos = dot(normal, lightDir);
 	vec3 mtlDiffuse = vec3(texture(material.diffuseTex, fragUV)) * material.diffuse;
 	vec3 diffuse = light.color * (max(lightCos, 0.0) * mtlDiffuse);
