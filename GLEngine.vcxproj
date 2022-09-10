@@ -163,6 +163,7 @@
     <ClCompile Include="src\glError.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\lights\DirectionalLight.cpp" />
+    <ClCompile Include="src\lights\FallOffLight.cpp" />
     <ClCompile Include="src\lights\Light.cpp" />
     <ClCompile Include="src\lights\PointLight.cpp" />
     <ClCompile Include="src\lights\SpotLight.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\glError.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\lights\DirectionalLight.h" />
+    <ClInclude Include="src\lights\FallOffLight.h" />
     <ClInclude Include="src\lights\Light.h" />
     <ClInclude Include="src\lights\PointLight.h" />
     <ClInclude Include="src\lights\SpotLight.h" />

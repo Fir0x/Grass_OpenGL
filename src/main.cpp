@@ -167,7 +167,7 @@ int main(void)
         glm::vec3 white(1.0f);
         GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));
         GLEngine::PointLight pointLight(white, glm::vec3(0.0f, 3.0f, 0.0f), 100);
-        GLEngine::SpotLight spotLight(white, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 22.0f);
+        GLEngine::SpotLight spotLight(white, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 25.0f, 35.0f, 100);
 
         while (!glfwWindowShouldClose(window))
         {

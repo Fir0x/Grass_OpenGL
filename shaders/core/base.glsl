@@ -56,7 +56,12 @@ struct SpotLight
 	vec3 color;
 	vec3 position;
 	vec3 direction;
-	float cutoff;
+	float inCutOff;
+	float outCutOff;
+
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 layout(location=0) out vec4 output_color;
@@ -118,18 +123,25 @@ vec3 processSpotLight(SpotLight light)
 {
 	vec3 lightDir = normalize(vec3(viewMatrix * vec4(light.position, 1.0)) - fragPos);
 	float theta = dot(lightDir, vec3(viewMatrix * vec4(-light.direction, 0.0)));
-	float isLighted = max(sign(theta - light.cutoff), 0.0);
+	float epsilon = light.inCutOff - light.outCutOff;
+	float intensity = clamp((theta - light.outCutOff) / epsilon, 0.0, 1.0);
 	
 	vec3 normal = normalize(fragNormal);
-	float diff = max(dot(normal, lightDir), 0.0) * isLighted;
+	float diff = max(dot(normal, lightDir), 0.0) * intensity;
 	vec3 mtlDiffuse = vec3(texture(material.diffuseTex, fragUV)) * material.diffuse;
 	vec3 diffuse = light.color * diff * mtlDiffuse;
 	
 	vec3 viewDir = normalize(-fragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess) * isLighted;
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess) * intensity;
 	vec3 mtlSpecular = vec3(texture(material.specularTex, fragUV)) * material.specular;
 	vec3 specular = light.color * spec * mtlSpecular;
+
+	float distance = length(light.position - fragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+
+    diffuse *= attenuation;
+    specular *= attenuation; 
 
 	return max(diffuse + specular, 0.0);
 }
