@@ -51,11 +51,20 @@ struct PointLight
 	float quadratic;
 };
 
+struct SpotLight
+{
+	vec3 color;
+	vec3 position;
+	vec3 direction;
+	float cutoff;
+};
+
 layout(location=0) out vec4 output_color;
 
 uniform Material material;
 uniform DirLight dirLight;
 uniform PointLight pointLight;
+uniform SpotLight spotLight;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -79,7 +88,7 @@ vec3 processDirectionalLight(DirLight light)
 	vec3 mtlSpecular = vec3(texture(material.specularTex, fragUV)) * material.specular;
 	vec3 specular = light.color * (spec * mtlSpecular);
 
-	return diffuse + specular;
+	return max(diffuse + specular, 0.0);
 }
 
 vec3 processPointLight(PointLight light)
@@ -102,11 +111,31 @@ vec3 processPointLight(PointLight light)
     diffuse *= attenuation;
     specular *= attenuation;  
 
-	return diffuse + specular;
+	return max(diffuse + specular, 0.0);
+}
+
+vec3 processSpotLight(SpotLight light)
+{
+	vec3 lightDir = normalize(vec3(viewMatrix * vec4(light.position, 1.0)) - fragPos);
+	float theta = dot(lightDir, vec3(viewMatrix * vec4(-light.direction, 0.0)));
+	float isLighted = max(sign(theta - light.cutoff), 0.0);
+	
+	vec3 normal = normalize(fragNormal);
+	float diff = max(dot(normal, lightDir), 0.0) * isLighted;
+	vec3 mtlDiffuse = vec3(texture(material.diffuseTex, fragUV)) * material.diffuse;
+	vec3 diffuse = light.color * diff * mtlDiffuse;
+	
+	vec3 viewDir = normalize(-fragPos);
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess) * isLighted;
+	vec3 mtlSpecular = vec3(texture(material.specularTex, fragUV)) * material.specular;
+	vec3 specular = light.color * spec * mtlSpecular;
+
+	return max(diffuse + specular, 0.0);
 }
 
 void main()
 {
-	vec3 color = processDirectionalLight(dirLight) + processPointLight(pointLight);
+	vec3 color = processDirectionalLight(dirLight) + processPointLight(pointLight) + processSpotLight(spotLight);
 	output_color = vec4(color, 1.0);
 }
