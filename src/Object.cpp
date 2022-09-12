@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <glm/ext.hpp>
 
-#include "glError.h"
+#include "glWrappers/glError.h"
 
 namespace GLEngine
 {

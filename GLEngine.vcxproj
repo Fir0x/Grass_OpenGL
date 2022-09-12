@@ -160,8 +160,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\glError.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\glWrappers\glError.cpp" />
+    <ClCompile Include="src\glWrappers\IndexBuffer.cpp" />
     <ClCompile Include="src\lights\DirectionalLight.cpp" />
     <ClCompile Include="src\lights\FallOffLight.cpp" />
     <ClCompile Include="src\lights\Light.cpp" />
@@ -173,13 +173,13 @@
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\glWrappers\VertexArray.cpp" />
+    <ClCompile Include="src\glWrappers\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\glError.h" />
-    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\glWrappers\glError.h" />
+    <ClInclude Include="src\glWrappers\IndexBuffer.h" />
     <ClInclude Include="src\lights\DirectionalLight.h" />
     <ClInclude Include="src\lights\FallOffLight.h" />
     <ClInclude Include="src\lights\Light.h" />
@@ -190,9 +190,9 @@
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\VertexArray.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
-    <ClInclude Include="src\VertexBufferLayout.h" />
+    <ClInclude Include="src\glWrappers\VertexArray.h" />
+    <ClInclude Include="src\glWrappers\VertexBuffer.h" />
+    <ClInclude Include="src\glWrappers\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.glsl" />

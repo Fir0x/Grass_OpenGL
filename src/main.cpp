@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Shader.h"
-#include "glError.h"
+#include "glWrappers/glError.h"
 #include "Camera.h"
 #include "Object.h"
 #include "Texture.h"

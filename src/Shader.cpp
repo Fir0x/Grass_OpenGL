@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "glError.h"
+#include "glWrappers/glError.h"
 
 namespace GLEngine
 {

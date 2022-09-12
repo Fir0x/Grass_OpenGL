@@ -4,10 +4,10 @@
 
 #include "Material.h"
 #include "Mesh.h"
-#include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
-#include "VertexArray.h"
-#include "IndexBuffer.h"
+#include "glWrappers/VertexBuffer.h"
+#include "glWrappers/VertexBufferLayout.h"
+#include "glWrappers/VertexArray.h"
+#include "glWrappers/IndexBuffer.h"
 
 namespace GLEngine
 {
