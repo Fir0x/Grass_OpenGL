@@ -82,10 +82,11 @@ namespace GLEngine
 	{
 		if (locations.find(name) == locations.end())
 		{
-			locations[name] = glGetUniformLocation(m_id, name); GL_AFTER_CHECK();
+			int l = glGetUniformLocation(m_id, name); GL_AFTER_CHECK();
+			locations.insert({ name, l });
 		}
 
-		return locations[name];
+		return locations.at(name);
 	}
 
 	Shader::Shader(const char* path)

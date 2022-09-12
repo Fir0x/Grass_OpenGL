@@ -17,7 +17,7 @@ namespace GLEngine
 	{
 	private:
 		unsigned int m_id;
-		std::unordered_map<const char*, int> locations;
+		std::unordered_map<std::string, int> locations;
 
 		ShaderSources parse_shader_file(const char* path);
 		unsigned int compile_shader(const std::string &path, unsigned int type);
