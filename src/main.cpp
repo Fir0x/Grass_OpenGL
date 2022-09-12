@@ -132,7 +132,7 @@ int main(void)
         return -1;
     }
 
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+    //std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     glViewport(0, 0, settings.screen_width, settings.screen_height);
 
@@ -166,7 +166,8 @@ int main(void)
         shader.use();
         glm::vec3 white(1.0f);
         GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));
-        GLEngine::PointLight pointLight(white, glm::vec3(0.0f, 3.0f, 0.0f), 100);
+        GLEngine::PointLight pointLight1(white, glm::vec3(3.0f, 0.0f, 0.0f), 100);
+        GLEngine::PointLight pointLight2(white, glm::vec3(-3.0f, 0.0f, 0.0f), 100);
         GLEngine::SpotLight spotLight(white, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 25.0f, 35.0f, 100);
 
         while (!glfwWindowShouldClose(window))
@@ -182,9 +183,10 @@ int main(void)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            //dirLight.SetupShaderProperties(shader);
-            //pointLight.SetupShaderProperties(shader);
-            spotLight.SetupShaderProperties(shader);
+            //dirLight.SetupShaderProperties(shader, 0);
+            pointLight1.SetupShaderProperties(shader, 0);
+            pointLight2.SetupShaderProperties(shader, 1);
+            //spotLight.SetupShaderProperties(shader, 0);
 
             for (const auto& obj : toRender)
             {

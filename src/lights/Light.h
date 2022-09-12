@@ -18,7 +18,8 @@ namespace GLEngine
 		/// Set shader uniforms needed to compute the light contribution.
 		/// </summary>
 		/// <param name="shader"></param>
-		virtual void SetupShaderProperties(Shader& shader) const = 0;
+		/// <param name="i">Index of the light.</param>
+		virtual void SetupShaderProperties(Shader& shader, int i) const = 0;
 
 		template <class T>
 		static T getFiller()

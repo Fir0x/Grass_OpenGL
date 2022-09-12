@@ -19,13 +19,14 @@ namespace GLEngine
 		m_radius = range;
 	}
 
-	void PointLight::SetupShaderProperties(Shader& shader) const
+	void PointLight::SetupShaderProperties(Shader& shader, int i) const
 	{
-		shader.setUniform3f("pointLight.color", m_color);
-		shader.setUniform3f("pointLight.position", m_position);
+		std::string prefix = "pointLight[" + std::to_string(i) + "].";
+		shader.setUniform3f((prefix + "color").c_str(), m_color);
+		shader.setUniform3f((prefix + "position").c_str(), m_position);
 
-		shader.setUniform1f("pointLight.constant", m_constant);
-		shader.setUniform1f("pointLight.linear", m_linear);
-		shader.setUniform1f("pointLight.quadratic", m_quadratic);
+		shader.setUniform1f((prefix + "constant").c_str(), m_constant);
+		shader.setUniform1f((prefix + "linear").c_str(), m_linear);
+		shader.setUniform1f((prefix + "quadratic").c_str(), m_quadratic);
 	}
 }

@@ -66,10 +66,14 @@ struct SpotLight
 
 layout(location=0) out vec4 output_color;
 
+const int MAX_DIR_LIGHT = 4;
+const int MAX_POINT_LIGHT = 4;
+const int MAX_SPOT_LIGHT = 4;
+
 uniform Material material;
-uniform DirLight dirLight;
-uniform PointLight pointLight;
-uniform SpotLight spotLight;
+uniform DirLight dirLight[MAX_DIR_LIGHT];
+uniform PointLight pointLight[MAX_POINT_LIGHT];
+uniform SpotLight spotLight[MAX_SPOT_LIGHT];
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -148,6 +152,15 @@ vec3 processSpotLight(SpotLight light)
 
 void main()
 {
-	vec3 color = processDirectionalLight(dirLight) + processPointLight(pointLight) + processSpotLight(spotLight);
+	vec3 color = vec3(0.0, 0.0, 0.0);
+	for (int i = 0; i < MAX_DIR_LIGHT; i++)
+		color += processDirectionalLight(dirLight[i]);
+
+	for (int i = 0; i < MAX_POINT_LIGHT; i++)
+		color += processPointLight(pointLight[i]);
+		
+	for (int i = 0; i < MAX_SPOT_LIGHT; i++)
+		color += processSpotLight(spotLight[i]);
+
 	output_color = vec4(color, 1.0);
 }

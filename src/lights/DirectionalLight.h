@@ -16,6 +16,6 @@ namespace GLEngine
 	public:
 		DirectionalLight(const glm::vec3& color, const glm::vec3& direction);
 
-		virtual void SetupShaderProperties(Shader& shader) const override;
+		virtual void SetupShaderProperties(Shader& shader, int i) const override;
 	};
 }

@@ -1,5 +1,7 @@
 #include "SpotLight.h"
 
+#include <iostream>
+
 namespace GLEngine
 {
 	SpotLight::SpotLight(const glm::vec3& color)
@@ -20,16 +22,17 @@ namespace GLEngine
 		m_outCutOff = outCutOff;
 	}
 
-	void SpotLight::SetupShaderProperties(Shader& shader) const
+	void SpotLight::SetupShaderProperties(Shader& shader, int i) const
 	{
-		shader.setUniform3f("spotLight.color", m_color);
-		shader.setUniform3f("spotLight.position", m_position);
-		shader.setUniform3f("spotLight.direction", m_direction);
-		shader.setUniform1f("spotLight.inCutOff", glm::cos(glm::radians(m_inCutOff)));
-		shader.setUniform1f("spotLight.outCutOff", glm::cos(glm::radians(m_outCutOff)));
+		std::string prefix = "spotLight[" + std::to_string(i) + "].";
+		shader.setUniform3f((prefix + "color").c_str(), m_color);
+		shader.setUniform3f((prefix + "position").c_str(), m_position);
+		shader.setUniform3f((prefix + "direction").c_str(), m_direction);
+		shader.setUniform1f((prefix + "inCutOff").c_str(), glm::cos(glm::radians(m_inCutOff)));
+		shader.setUniform1f((prefix + "outCutOff").c_str(), glm::cos(glm::radians(m_outCutOff)));
 
-		shader.setUniform1f("spotLight.constant", m_constant);
-		shader.setUniform1f("spotLight.linear", m_linear);
-		shader.setUniform1f("spotLight.quadratic", m_quadratic);
+		shader.setUniform1f((prefix + "constant").c_str(), m_constant);
+		shader.setUniform1f((prefix + "linear").c_str(), m_linear);
+		shader.setUniform1f((prefix + "quadratic").c_str(), m_quadratic);
 	}
 }

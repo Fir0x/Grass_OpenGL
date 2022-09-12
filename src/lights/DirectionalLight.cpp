@@ -16,9 +16,10 @@ namespace GLEngine
 		m_direction = glm::normalize(direction);
 	}
 
-	void DirectionalLight::SetupShaderProperties(Shader& shader) const
+	void DirectionalLight::SetupShaderProperties(Shader& shader, int i) const
 	{
-		shader.setUniform3f("dirLight.color", m_color);
-		shader.setUniform3f("dirLight.direction", m_direction);
+		std::string prefix = "dirLight[" + std::to_string(i) + "].";
+		shader.setUniform3f((prefix + "color").c_str(), m_color);
+		shader.setUniform3f((prefix + "direction").c_str(), m_direction);
 	}
 }
