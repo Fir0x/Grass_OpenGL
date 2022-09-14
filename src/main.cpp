@@ -156,12 +156,12 @@ int main(void)
         std::vector<GLEngine::Object*> toRender;
         GLEngine::TextureManager texManager;
         auto texId = texManager.loadTexture("textures\\texture.jpg");
-        auto meshes = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj", texManager);
-        for (const auto& mesh : meshes)
-        {
-            auto renderer = new GLEngine::MeshRenderer(mesh);
-            toRender.push_back(new GLEngine::Object(renderer));
-        }
+        auto mesh = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj");
+        if (!mesh.has_value())
+            return 1;
+
+        auto renderer = new GLEngine::MeshRenderer(mesh.value());
+        toRender.push_back(new GLEngine::Object(renderer));
 
         GLEngine::Shader shader("shaders\\core\\base.glsl");
         shader.use();

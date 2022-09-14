@@ -1,23 +1,14 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <optional>
 #include <string>
 
 #include "Texture.h"
 
 namespace GLEngine
 {
-	struct Material
-	{
-		std::string name;
-		glm::vec3 ambient;
-		glm::vec3 diffuse;
-		glm::vec3 specular;
-
-		unsigned int diffuseTex;
-	};
-
-	class MaterialFactory
+	class Material
 	{
 	private:
 		std::string m_name;
@@ -25,18 +16,17 @@ namespace GLEngine
 		glm::vec3 m_diffuse;
 		glm::vec3 m_specular;
 
-		std::string m_diffuseTexPath;
+		unsigned int m_diffuseTex;
 
 	public:
-		MaterialFactory();
+		Material(const std::string& name);
 
-		MaterialFactory& setName(const std::string& name);
-		MaterialFactory& setAmbient(const glm::vec3& ambient);
-		MaterialFactory& setDiffuse(const glm::vec3& diffuse);
-		MaterialFactory& setSpecular(const glm::vec3& specular);
-		MaterialFactory& setDiffuseTex(const std::string& path);
+		Material& setName(const std::string& name);
+		Material& setAmbient(const glm::vec3& ambient);
+		Material& setDiffuse(const glm::vec3& diffuse);
+		Material& setSpecular(const glm::vec3& specular);
+		Material& setDiffuseTex(const std::string& path, TextureManager& texManager);
 
-		Material generateMaterial(TextureManager& texManager) const;
-		void reset();
+		static std::optional<Material> loadFromMtl(const std::string path);
 	};
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <vector>
+#include <optional>
 #include <string>
+#include <vector>
 
 #include "Texture.h"
 
@@ -54,6 +55,6 @@ namespace GLEngine
 		/// <param name="path"></param>
 		void writeBufferAsOBJ(const char* path);
 
-		static std::vector<Mesh> loadOBJFile(const std::string& path, TextureManager& texManager);
+		static std::optional<Mesh> loadOBJFile(const std::string& path);
 	};
 }

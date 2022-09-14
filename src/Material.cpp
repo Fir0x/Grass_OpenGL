@@ -1,60 +1,126 @@
 #include "Material.h"
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
 namespace GLEngine
 {
-	MaterialFactory::MaterialFactory()
+	Material::Material(const std::string& name)
 	{
-		reset();
+		m_name = name;
+		m_ambient = glm::vec3(1.0f);
+		m_diffuse = glm::vec3(1.0f);
+		m_specular = glm::vec3(1.0f);
+
+		// TODO
+		// Use a default texture
+		m_diffuseTex = 0;
 	}
 
-	MaterialFactory& MaterialFactory::setName(const std::string& name)
+	Material& Material::setName(const std::string& name)
 	{
 		m_name = name;
 		return *this;
 	}
 
-	MaterialFactory& MaterialFactory::setAmbient(const glm::vec3& ambient)
+	Material& Material::setAmbient(const glm::vec3& ambient)
 	{
 		m_ambient = ambient;
 		return *this;
 	}
 
-	MaterialFactory& MaterialFactory::setDiffuse(const glm::vec3& diffuse)
+	Material& Material::setDiffuse(const glm::vec3& diffuse)
 	{
 		m_diffuse = diffuse;
 		return *this;
 	}
 
-	MaterialFactory& MaterialFactory::setSpecular(const glm::vec3& specular)
+	Material& Material::setSpecular(const glm::vec3& specular)
 	{
 		m_specular = specular;
 		return *this;
 	}
 
-	MaterialFactory& MaterialFactory::setDiffuseTex(const std::string& path)
+	Material& Material::setDiffuseTex(const std::string& path, TextureManager& texManager)
 	{
-		m_diffuseTexPath = path;
+		m_diffuseTex = texManager.loadTexture(path);
 		return *this;
 	}
 
-	Material MaterialFactory::generateMaterial(TextureManager& texManager) const
+	static std::vector<std::string> splitstr(const std::string& str, char delim)
 	{
-		Material mat;
-		mat.name = m_name;
-		mat.ambient = m_ambient;
-		mat.diffuse = m_diffuse;
-		mat.specular = m_specular;
-		mat.diffuseTex = m_diffuseTexPath.empty() ? 0 : texManager.loadTexture(m_diffuseTexPath);
+		std::vector<std::string> splitted;
 
-		return mat;
+		std::istringstream stream(str);
+		std::string word;
+		while (std::getline(stream, word, delim))
+		{
+			splitted.push_back(word);
+		}
+
+		return splitted;
 	}
 
-	void MaterialFactory::reset()
+	std::optional<Material> Material::loadFromMtl(const std::string path)
 	{
-		m_name = "";
-		m_ambient = glm::vec3(1.0f);
-		m_diffuse = glm::vec3(1.0f);
-		m_specular = glm::vec3(1.0f);
-		m_diffuseTexPath = "";
+		std::ifstream stream;
+		stream.open(path);
+
+		if (stream.is_open())
+		{
+			Material material("placeholder");
+			bool secondMtl = false;
+			std::string line;
+
+			while (std::getline(stream, line))
+			{
+				if (line[0] == '#' || line.empty())
+					continue;
+
+				auto splitted = splitstr(line, ' ');
+				const std::string& tag = splitted[0];
+				if (tag == "newmtl")
+				{
+					if (secondMtl)
+					{
+						std::cerr << "WARNING: " << path
+							<< " contained more than one material definition. "
+							<< "Only the first one was parsed.";
+						return material;
+					}
+
+					material.setName(splitted[1]);
+				}
+				else if (tag == "Ka")
+				{
+					glm::vec3 ambient;
+					ambient.r = std::stof(splitted[1]);
+					ambient.g = std::stof(splitted[2]);
+					ambient.b = std::stof(splitted[3]);
+					material.setAmbient(ambient);
+				}
+				else if (tag == "Kd")
+				{
+					glm::vec3 diffuse;
+					diffuse.r = std::stof(splitted[1]);
+					diffuse.g = std::stof(splitted[2]);
+					diffuse.b = std::stof(splitted[3]);
+					material.setDiffuse(diffuse);
+				}
+				else if (tag == "Ks")
+				{
+					glm::vec3 specular;
+					specular.r = std::stof(splitted[1]);
+					specular.g = std::stof(splitted[2]);
+					specular.b = std::stof(splitted[3]);
+					material.setSpecular(specular);
+				}
+			}
+
+			return material;
+		}
+		else
+			return std::optional<Material>();
 	}
 }

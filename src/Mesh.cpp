@@ -111,72 +111,7 @@ namespace GLEngine
 		return splitted;
 	}
 
-	static std::map<std::string, Material> loadMtl(const std::string& path, TextureManager &texManager)
-	{
-		std::map<std::string, Material> lib;
-
-		std::ifstream stream;
-		stream.open(path);
-		bool pushMtl = false;
-		MaterialFactory matFactory;
-
-		if (stream.is_open())
-		{
-			std::string line;
-			while (std::getline(stream, line))
-			{
-				if (line[0] == '#' || line.empty())
-					continue;
-
-				auto splitted = splitstr(line, ' ');
-				const std::string& tag = splitted[0];
-				if (tag == "newmtl")
-				{
-					if (pushMtl)
-					{
-						Material mat = matFactory.generateMaterial(texManager);
-						lib.insert({ mat.name, mat });
-						matFactory.reset();
-					}
-					else
-						pushMtl = true;
-
-					matFactory.setName(splitted[1]);
-				}
-				else if (tag == "Ka")
-				{
-					glm::vec3 ambient;
-					ambient.r = std::stof(splitted[1]);
-					ambient.g = std::stof(splitted[2]);
-					ambient.b = std::stof(splitted[3]);
-					matFactory.setAmbient(ambient);
-				}
-				else if (tag == "Kd")
-				{
-					glm::vec3 diffuse;
-					diffuse.r = std::stof(splitted[1]);
-					diffuse.g = std::stof(splitted[2]);
-					diffuse.b = std::stof(splitted[3]);
-					matFactory.setDiffuse(diffuse);
-				}
-				else if (tag == "Ks")
-				{
-					glm::vec3 specular;
-					specular.r = std::stof(splitted[1]);
-					specular.g = std::stof(splitted[2]);
-					specular.b = std::stof(splitted[3]);
-					matFactory.setSpecular(specular);
-				}
-			}
-
-			Material mat = matFactory.generateMaterial(texManager);
-			lib.insert({ mat.name, mat });
-		}
-
-		return lib;
-	}
-
-	std::vector<Mesh> Mesh::loadOBJFile(const std::string& path, TextureManager &texManager)
+	std::optional<Mesh> Mesh::loadOBJFile(const std::string& path)
 	{
 		std::ifstream stream;
 		stream.open(path);
@@ -185,7 +120,8 @@ namespace GLEngine
 
 		if (stream.is_open())
 		{
-			Mesh currentMesh;
+			Mesh mesh;
+			bool secondMesh = false;
 
 			std::vector<glm::vec3> vertices;
 			std::vector<glm::vec3> normals;
@@ -204,11 +140,6 @@ namespace GLEngine
 			};
 			std::map<VertexInfo, int> indexMapper;
 
-			std::map<std::string, Material> mtllib;
-			bool pushMesh = false;
-			bool useMtl = false;
-			Material currentMtl;
-
 			std::string folder = path.substr(0, path.find_last_of('\\') + 1);
 			std::string line;
 			while (std::getline(stream, line))
@@ -219,14 +150,13 @@ namespace GLEngine
 				auto splitted = splitstr(line, ' ');
 				if (line[0] == 'o')
 				{
-					if (pushMesh)
+					if (secondMesh)
 					{
-						indexMapper.clear();
-						meshes.push_back(currentMesh);
-						currentMesh = Mesh();
+						std::cerr << "WARNING: " << path
+							<< " contained more than one mesh definition. "
+							<< "Only the first one was parsed.";
+						return mesh;
 					}
-					else
-						pushMesh = true;
 				}
 				else if (line[0] == 'v')
 				{
@@ -269,35 +199,22 @@ namespace GLEngine
 							glm::vec3 v = vertices.at(vertIdx);
 							glm::vec3 n = normals.at(normIdx);
 							glm::vec2 uv = uvs.at(uvIdx);
-							indexMapper.insert({ vInfo, currentMesh.addFaceVertex(v, n, uv) });
+							indexMapper.insert({ vInfo, mesh.addFaceVertex(v, n, uv) });
 						}
 						else
 						{
-							currentMesh.addFaceVertex(indexMapper[vInfo]);
+							mesh.addFaceVertex(indexMapper[vInfo]);
 						}
 					}
 				}
-				else if (splitted[0] == "mtllib")
-				{
-					mtllib = loadMtl(folder + splitted[1], texManager);
-				}
-				else if (splitted[0] == "usemtl")
-				{
-					currentMtl = mtllib[splitted[1]];
-					useMtl = true;
-				}
 			}
 
-			if (pushMesh)
-			{
-				meshes.push_back(currentMesh);
-			}
+			return mesh;
 		}
 		else
 		{
 			std::cerr << "Failed to open OBJ file at " << path << "\n";
+			return std::optional<Mesh>();
 		}
-
-		return meshes;
 	}
 }
