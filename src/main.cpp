@@ -132,7 +132,7 @@ int main(void)
         return -1;
     }
 
-    //std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     glViewport(0, 0, settings.screen_width, settings.screen_height);
 
@@ -154,8 +154,7 @@ int main(void)
         glfwSetFramebufferSizeCallback(window, screen_size_callback);
 
         std::vector<GLEngine::Object*> toRender;
-        GLEngine::TextureManager texManager;
-        auto texId = texManager.loadTexture("textures\\texture.jpg");
+        auto texId = GLEngine::TextureManager::loadTexture("textures\\texture.jpg");
         auto mesh = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj");
         if (!mesh.has_value())
             return 1;
@@ -196,9 +195,9 @@ int main(void)
                 shader.setUniform3f("material.diffuse", white);
                 shader.setUniform3f("material.specular", white);
                 shader.setUniform1f("material.shininess", 32.0f);
-                texManager.getTexture(texId)->bindToUnit(0);
+                GLEngine::TextureManager::getTexture(texId)->bindToUnit(0);
                 shader.setUniform1i("material.diffuseTex", 0);
-                texManager.getDefaultTexture()->bindToUnit(1);
+                GLEngine::TextureManager::getDefaultTexture()->bindToUnit(1);
                 shader.setUniform1i("material.specularTex", 1);
                 obj->draw();
             }
@@ -212,6 +211,7 @@ int main(void)
         {
             delete obj;
         }
+        GLEngine::TextureManager::clean();
     }
 
     glfwTerminate();

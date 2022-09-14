@@ -34,13 +34,16 @@ namespace GLEngine
 		std::map<unsigned int, Texture*> m_textures;
 		unsigned int m_defaultTexId;
 
-	public:
 		TextureManager();
-		~TextureManager();
+		TextureManager(const TextureManager&) = delete;
 
-		unsigned int loadTexture(const std::string& path);
-		void deleteTexture(const unsigned int id);
-		const Texture* getTexture(const unsigned int id) const;
-		const Texture* getDefaultTexture() const;
+		static TextureManager& getInstance();
+
+	public:
+		static unsigned int loadTexture(const std::string& path);
+		static void deleteTexture(const unsigned int id);
+		static const Texture* getTexture(const unsigned int id);
+		static const Texture* getDefaultTexture();
+		static void clean();
 	};
 }

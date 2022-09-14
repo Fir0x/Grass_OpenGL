@@ -67,17 +67,18 @@ namespace GLEngine
 		m_textures.insert({ m_defaultTexId, defaultTex });
 	}
 
-	TextureManager::~TextureManager()
+	TextureManager& TextureManager::getInstance()
 	{
-		for (auto iter = m_textures.begin(); iter != m_textures.end(); iter++)
-			delete iter->second;
+		static TextureManager texManager;
+		return texManager;
 	}
 
 	unsigned int TextureManager::loadTexture(const std::string& path)
 	{
 		auto absPath = std::filesystem::absolute(path).string();
-		if (m_pathMapper.find(absPath) != m_pathMapper.end())
-			return m_textures[m_pathMapper[absPath]]->getId();
+		TextureManager& instance = getInstance();
+		if (instance.m_pathMapper.find(absPath) != instance.m_pathMapper.end())
+			return instance.m_textures[instance.m_pathMapper[absPath]]->getId();
 
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
@@ -90,8 +91,8 @@ namespace GLEngine
 
 		auto texture = new Texture(absPath, width, height, data);
 		auto texId = texture->getId();
-		m_pathMapper.insert({ absPath, texId });
-		m_textures.insert({ texId, texture });
+		instance.m_pathMapper.insert({ absPath, texId });
+		instance.m_textures.insert({ texId, texture });
 
 		stbi_image_free(data);
 
@@ -100,29 +101,39 @@ namespace GLEngine
 
 	void TextureManager::deleteTexture(const unsigned int id)
 	{
-		if (id == m_defaultTexId || m_textures.find(id) == m_textures.end())
+		TextureManager& instance = getInstance();
+		if (id == instance.m_defaultTexId || instance.m_textures.find(id) == instance.m_textures.end())
 			return;
 
-		Texture* texture = m_textures.at(id);
+		Texture* texture = instance.m_textures.at(id);
 		auto path = texture->getPath();
 		if (path != "$DEFAULT_TEX")
 		{
-			m_pathMapper.erase(path);
-			m_textures.erase(id);
+			instance.m_pathMapper.erase(path);
+			instance.m_textures.erase(id);
 			free(texture);
 		}
 	}
 
-	const Texture* TextureManager::getTexture(const unsigned int id) const
+	const Texture* TextureManager::getTexture(const unsigned int id)
 	{
-		if (m_textures.find(id) == m_textures.end())
+		TextureManager& instance = getInstance();
+		if (instance.m_textures.find(id) == instance.m_textures.end())
 			return nullptr;
 
-		return m_textures.at(id);
+		return instance.m_textures.at(id);
 	}
 
-	const Texture* TextureManager::getDefaultTexture() const
+	const Texture* TextureManager::getDefaultTexture()
 	{
-		return m_textures.at(m_defaultTexId);
+		TextureManager& instance = getInstance();
+		return instance.m_textures.at(instance.m_defaultTexId);
+	}
+
+	void TextureManager::clean()
+	{
+		TextureManager& instance = getInstance();
+		for (auto iter = instance.m_textures.begin(); iter != instance.m_textures.end(); iter++)
+			delete iter->second;
 	}
 }
