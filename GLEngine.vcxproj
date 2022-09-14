@@ -170,6 +170,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\MeshRenderer.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="src\lights\SpotLight.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\MeshRenderer.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Texture.h" />

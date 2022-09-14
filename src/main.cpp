@@ -159,7 +159,8 @@ int main(void)
         auto meshes = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj", texManager);
         for (const auto& mesh : meshes)
         {
-            toRender.push_back(new GLEngine::Object(mesh));
+            auto renderer = new GLEngine::MeshRenderer(mesh);
+            toRender.push_back(new GLEngine::Object(renderer));
         }
 
         GLEngine::Shader shader("shaders\\core\\base.glsl");
