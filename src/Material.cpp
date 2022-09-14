@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "Texture.h"
+
 namespace GLEngine
 {
 	Material::Material(const std::string& name)
@@ -13,9 +15,9 @@ namespace GLEngine
 		m_diffuse = glm::vec3(1.0f);
 		m_specular = glm::vec3(1.0f);
 
-		// TODO
-		// Use a default texture
-		m_diffuseTex = 0;
+		unsigned int defaultId = TextureManager::getDefaultTexture()->getId();
+		m_diffuseTex = defaultId;
+		m_specularTex = defaultId;
 	}
 
 	Material& Material::setName(const std::string& name)
@@ -42,10 +44,27 @@ namespace GLEngine
 		return *this;
 	}
 
-	Material& Material::setDiffuseTex(const std::string& path, TextureManager& texManager)
+	Material& Material::setDiffuseTex(const std::string& path)
 	{
-		m_diffuseTex = texManager.loadTexture(path);
+		m_diffuseTex = TextureManager::loadTexture(path);
 		return *this;
+	}
+
+	Material& Material::setSpecularTex(const std::string& path)
+	{
+		m_specularTex = TextureManager::loadTexture(path);
+		return *this;
+	}
+
+	void Material::loadToGPU(Shader& shader) const
+	{
+		shader.setUniform3f("material.diffuse", m_diffuse);
+		shader.setUniform3f("material.specular", m_ambient);
+		shader.setUniform1f("material.shininess", 32.0f);
+		GLEngine::TextureManager::getTexture(m_diffuseTex)->bindToUnit(0);
+		shader.setUniform1i("material.diffuseTex", 0);
+		GLEngine::TextureManager::getTexture(m_specularTex)->bindToUnit(1);
+		shader.setUniform1i("material.specularTex", 1);
 	}
 
 	static std::vector<std::string> splitstr(const std::string& str, char delim)
@@ -115,6 +134,14 @@ namespace GLEngine
 					specular.g = std::stof(splitted[2]);
 					specular.b = std::stof(splitted[3]);
 					material.setSpecular(specular);
+				}
+				else if (tag == "map_Kd")
+				{
+					material.setDiffuseTex(splitted[1]);
+				}
+				else if (tag == "map_Ks")
+				{
+					material.setSpecularTex(splitted[1]);
 				}
 			}
 

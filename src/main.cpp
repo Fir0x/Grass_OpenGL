@@ -159,6 +159,10 @@ int main(void)
         if (!mesh.has_value())
             return 1;
 
+        auto material = GLEngine::Material::loadFromMtl("meshes\\cylinder.mtl");
+        if (!mesh.has_value())
+            return 1;
+
         auto renderer = new GLEngine::MeshRenderer(mesh.value());
         toRender.push_back(new GLEngine::Object(renderer));
 
@@ -192,13 +196,7 @@ int main(void)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
                 shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(obj->getModelMatrix(), mainCamera.getViewMatrix()));
-                shader.setUniform3f("material.diffuse", white);
-                shader.setUniform3f("material.specular", white);
-                shader.setUniform1f("material.shininess", 32.0f);
-                GLEngine::TextureManager::getTexture(texId)->bindToUnit(0);
-                shader.setUniform1i("material.diffuseTex", 0);
-                GLEngine::TextureManager::getDefaultTexture()->bindToUnit(1);
-                shader.setUniform1i("material.specularTex", 1);
+                material.value().loadToGPU(shader);
                 obj->draw();
             }
 

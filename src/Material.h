@@ -4,7 +4,7 @@
 #include <optional>
 #include <string>
 
-#include "Texture.h"
+#include "Shader.h"
 
 namespace GLEngine
 {
@@ -17,6 +17,7 @@ namespace GLEngine
 		glm::vec3 m_specular;
 
 		unsigned int m_diffuseTex;
+		unsigned int m_specularTex;
 
 	public:
 		Material(const std::string& name);
@@ -25,7 +26,10 @@ namespace GLEngine
 		Material& setAmbient(const glm::vec3& ambient);
 		Material& setDiffuse(const glm::vec3& diffuse);
 		Material& setSpecular(const glm::vec3& specular);
-		Material& setDiffuseTex(const std::string& path, TextureManager& texManager);
+		Material& setDiffuseTex(const std::string& path);
+		Material& setSpecularTex(const std::string& path);
+
+		void loadToGPU(Shader& shader) const;
 
 		static std::optional<Material> loadFromMtl(const std::string path);
 	};
