@@ -12,6 +12,7 @@ namespace GLEngine
 		
 	public:
 		VertexArray(const VertexBuffer& vb, const VertexBufferLayout& layout);
+		VertexArray(const VertexArray&) = delete;
 		~VertexArray();
 
 		void bind() const;

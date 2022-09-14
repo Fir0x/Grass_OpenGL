@@ -9,6 +9,7 @@ namespace GLEngine
 
 	public:
 		VertexBuffer(const void *buffer, size_t size);
+		VertexBuffer(const VertexBuffer&) = delete;
 		~VertexBuffer();
 
 		void bind() const;

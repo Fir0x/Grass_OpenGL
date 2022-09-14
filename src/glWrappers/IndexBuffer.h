@@ -10,6 +10,7 @@ namespace GLEngine
 
 	public:
 		IndexBuffer(const unsigned int *indices, int count);
+		IndexBuffer(const IndexBuffer&) = delete;
 		~IndexBuffer();
 
 		void bind() const;
