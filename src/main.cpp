@@ -159,11 +159,10 @@ int main(void)
         if (!mesh.has_value())
             return 1;
 
-        auto material = GLEngine::Material::loadFromMtl("meshes\\cylinder.mtl");
-        if (!mesh.has_value())
-            return 1;
+        unsigned int matId = GLEngine::MaterialLibrary::loadFromMtl("meshes\\cylinder.mtl");
 
         auto renderer = new GLEngine::MeshRenderer(mesh.value());
+        renderer->setMaterial(matId);
         toRender.push_back(new GLEngine::Object(renderer));
 
         GLEngine::Shader shader("shaders\\core\\base.glsl");
@@ -196,8 +195,7 @@ int main(void)
             {
                 shader.setUniformMatrix4f("modelMatrix", obj->getModelMatrix());
                 shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(obj->getModelMatrix(), mainCamera.getViewMatrix()));
-                material.value().loadToGPU(shader);
-                obj->draw();
+                obj->draw(shader);
             }
 
             glfwSwapBuffers(window);

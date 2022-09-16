@@ -29,8 +29,8 @@ namespace GLEngine
 		return glm::translate(glm::mat4(1.0f), m_pos);
 	}
 
-	void Object::draw() const
+	void Object::draw(Shader& shader) const
 	{
-		m_renderer->draw();
+		m_renderer->draw(shader);
 	}
 }

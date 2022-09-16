@@ -19,6 +19,6 @@ namespace GLEngine
 
 		glm::mat4 getModelMatrix() const;
 
-		void draw() const;
+		void draw(Shader& shader) const;
 	};
 }

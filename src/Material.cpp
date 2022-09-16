@@ -150,4 +150,44 @@ namespace GLEngine
 		else
 			return std::optional<Material>();
 	}
+
+	MaterialLibrary::MaterialLibrary()
+	{
+		m_library.insert({ 1, Material("$DEFAULT") });
+		m_currentId = 2;
+	}
+
+	MaterialLibrary& MaterialLibrary::getInstance()
+	{
+		static MaterialLibrary instance;
+		return instance;
+	}
+
+	unsigned int MaterialLibrary::loadFromMtl(const std::string& path)
+	{
+		auto material = Material::loadFromMtl(path);
+		if (material.has_value())
+		{
+			MaterialLibrary& instance = getInstance();
+			unsigned int id = instance.m_currentId++;
+			instance.m_library.insert({ id, material.value() });
+			return id;
+		}
+		
+		return 0;
+	}
+
+	void MaterialLibrary::useMaterial(unsigned int id, Shader& shader)
+	{
+		MaterialLibrary& instance = getInstance();
+		if (instance.m_library.find(id) != instance.m_library.end())
+		{
+			instance.m_library.at(id).loadToGPU(shader);
+		}
+	}
+
+	unsigned int MaterialLibrary::getDefaultId()
+	{
+		return 1;
+	}
 }

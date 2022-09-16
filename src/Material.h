@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <map>
 #include <optional>
 #include <string>
 
@@ -32,5 +33,20 @@ namespace GLEngine
 		void loadToGPU(Shader& shader) const;
 
 		static std::optional<Material> loadFromMtl(const std::string path);
+	};
+
+	class MaterialLibrary
+	{
+	private:
+		std::map<unsigned int, Material> m_library;
+		unsigned int m_currentId;
+		MaterialLibrary();
+
+		static MaterialLibrary& getInstance();
+
+	public:
+		static unsigned int loadFromMtl(const std::string& path);
+		static void useMaterial(unsigned int id, Shader& shader);
+		static unsigned int getDefaultId();
 	};
 }

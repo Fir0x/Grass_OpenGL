@@ -21,6 +21,7 @@ namespace GLEngine
 	MeshRenderer::MeshRenderer(const Mesh& mesh)
 	{
 		loadGPUData(mesh);
+		m_materialId = MaterialLibrary::getDefaultId();
 	}
 
 	MeshRenderer::~MeshRenderer()
@@ -31,8 +32,14 @@ namespace GLEngine
 		delete m_vbo;
 	}
 
-	void MeshRenderer::draw() const
+	void MeshRenderer::setMaterial(unsigned int id)
 	{
+		m_materialId = id;
+	}
+
+	void MeshRenderer::draw(Shader& shader) const
+	{
+		MaterialLibrary::useMaterial(m_materialId, shader);
 		m_vao->bind();
 		m_ib->bind();
 		GL_CALL(glDrawElements(GL_TRIANGLES, m_ib->count(), GL_UNSIGNED_INT, nullptr));

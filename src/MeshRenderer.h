@@ -19,12 +19,16 @@ namespace GLEngine
 		VertexArray* m_vao;
 		IndexBuffer* m_ib;
 
+		unsigned int m_materialId;
+
 		void loadGPUData(const Mesh& mesh);
 
 	public:
 		MeshRenderer(const Mesh& mesh);
 		~MeshRenderer();
 
-		void draw() const;
+		void setMaterial(unsigned int id);
+
+		void draw(Shader& shader) const;
 	};
 }
