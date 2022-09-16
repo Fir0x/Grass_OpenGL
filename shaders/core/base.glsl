@@ -75,8 +75,6 @@ uniform DirLight dirLight[MAX_DIR_LIGHT];
 uniform PointLight pointLight[MAX_POINT_LIGHT];
 uniform SpotLight spotLight[MAX_SPOT_LIGHT];
 
-uniform vec3 lightPos;
-uniform vec3 lightColor;
 uniform mat4 viewMatrix;
 
 in vec2 fragUV;
