@@ -188,9 +188,15 @@ int main(void)
             pointLight2.SetupShaderProperties(shader, 1);
             //spotLight.SetupShaderProperties(shader, 0);
 
+            // Update step
             for (const auto& obj : toRender)
             {
                 obj->update();
+            }
+
+            // Draw step
+            for (const auto& obj : toRender)
+            {
                 obj->draw({ shader, mainCamera.getViewMatrix() });
             }
 

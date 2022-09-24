@@ -23,8 +23,8 @@ namespace GLEngine
 		void rotate(float angleX, float angleY, float angleZ);
 
 		const glm::mat4& getMatrix() const;
-		const glm::vec3& getRight() const;
-		const glm::vec3& getUp() const;
-		const glm::vec3& getForward() const;
+		const glm::vec3 getRight() const;
+		const glm::vec3 getUp() const;
+		const glm::vec3 getForward() const;
 	};
 }

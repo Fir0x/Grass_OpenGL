@@ -45,17 +45,17 @@ namespace GLEngine
 		return m_transforms;
 	}
 
-	const glm::vec3& Transform::getRight() const
+	const glm::vec3 Transform::getRight() const
 	{
 		return glm::column(m_transforms, 0);
 	}
 
-	const glm::vec3& Transform::getUp() const
+	const glm::vec3 Transform::getUp() const
 	{
 		return glm::column(m_transforms, 1);
 	}
 
-	const glm::vec3& Transform::getForward() const
+	const glm::vec3 Transform::getForward() const
 	{
 		return glm::column(m_transforms, 2);
 	}
