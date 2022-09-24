@@ -37,9 +37,9 @@ namespace GLEngine
 		m_materialId = id;
 	}
 
-	void MeshRenderer::draw(Shader& shader) const
+	void MeshRenderer::draw(const DrawContext& context) const
 	{
-		MaterialLibrary::useMaterial(m_materialId, shader);
+		MaterialLibrary::useMaterial(m_materialId, context.currentShader);
 		m_vao->bind();
 		m_ib->bind();
 		GL_CALL(glDrawElements(GL_TRIANGLES, m_ib->count(), GL_UNSIGNED_INT, nullptr));

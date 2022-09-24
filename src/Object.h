@@ -3,12 +3,13 @@
 #include <glm/glm.hpp>
 
 #include "Camera.h"
+#include "IDrawable.h"
 #include "MeshRenderer.h"
 #include "Transform.h"
 
 namespace GLEngine
 {
-	class Object
+	class Object : IDrawable
 	{
 	private:
 		Transform m_transform;
@@ -24,6 +25,6 @@ namespace GLEngine
 
 		Transform& getTransform();
 
-		void draw(Shader& shader, Camera& camera) const;
+		virtual void draw(const DrawContext& context) const override;
 	};
 }

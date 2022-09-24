@@ -186,7 +186,7 @@ int main(void)
             for (const auto& obj : toRender)
             {
                 obj->getTransform().rotate(0.01f, 0.01f, 0.01f);
-                obj->draw(shader, mainCamera);
+                obj->draw({ shader, mainCamera.getViewMatrix() });
             }
 
             glfwSwapBuffers(window);

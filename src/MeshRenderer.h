@@ -4,12 +4,13 @@
 #include "glWrappers/VertexArray.h"
 #include "glWrappers/VertexBuffer.h"
 #include "glWrappers/VertexBufferLayout.h"
+#include "IDrawable.h"
 #include "Material.h"
 #include "Mesh.h"
 
 namespace GLEngine
 {
-	class MeshRenderer
+	class MeshRenderer : IDrawable
 	{
 	private:
 		float* m_renderBuffer;
@@ -29,6 +30,6 @@ namespace GLEngine
 
 		void setMaterial(unsigned int id);
 
-		void draw(Shader& shader) const;
+		virtual void draw(const DrawContext& context) const override;
 	};
 }

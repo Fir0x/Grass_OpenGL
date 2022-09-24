@@ -34,11 +34,11 @@ namespace GLEngine
 		return m_transform;
 	}
 
-	void Object::draw(Shader& shader, Camera& camera) const
+	void Object::draw(const DrawContext& context) const
 	{
 		const glm::mat4& modelMatrix = m_transform.getMatrix();
-		shader.setUniformMatrix4f("modelMatrix", modelMatrix);
-		shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(modelMatrix, camera.getViewMatrix()));
-		m_renderer->draw(shader);
+		context.currentShader.setUniformMatrix4f("modelMatrix", modelMatrix);
+		context.currentShader.setUniformMatrix3f("normalMatrix", processNormalMatrix(modelMatrix, context.viewMatrix));
+		m_renderer->draw(context);
 	}
 }

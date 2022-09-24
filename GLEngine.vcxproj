@@ -180,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\IDrawable.h" />
     <ClInclude Include="src\glWrappers\glError.h" />
     <ClInclude Include="src\glWrappers\IndexBuffer.h" />
     <ClInclude Include="src\lights\DirectionalLight.h" />
