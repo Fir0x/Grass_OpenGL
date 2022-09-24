@@ -11,12 +11,14 @@ namespace GLEngine
 	{
 		m_transform = Transform();
 		m_renderer = renderer;
+		m_behavior = nullptr;
 	}
 
 	Object::Object(const glm::vec3& pos, MeshRenderer* renderer)
 	{
 		m_transform = Transform(pos);
 		m_renderer = renderer;
+		m_behavior = nullptr;
 	}
 
 	Object::~Object()
@@ -32,6 +34,12 @@ namespace GLEngine
 	Transform& Object::getTransform()
 	{
 		return m_transform;
+	}
+
+	void Object::update()
+	{
+		if (m_behavior != nullptr)
+			m_behavior->update();
 	}
 
 	void Object::draw(const DrawContext& context) const

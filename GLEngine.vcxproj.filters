@@ -128,6 +128,9 @@
     <ClInclude Include="src\IDrawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Behavior.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.glsl" />

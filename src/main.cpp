@@ -158,7 +158,12 @@ int main(void)
 
         auto renderer = new GLEngine::MeshRenderer(mesh.value());
         renderer->setMaterial(matId);
-        toRender.push_back(new GLEngine::Object(renderer));
+        auto* object = new GLEngine::Object(renderer);
+        GLEngine::QuickBehavior bhv([](GLEngine::Object* obj) {
+                obj->getTransform().rotate(0.01f, 0.01f, 0.01f);
+            });
+        object->setBehavior(&bhv);
+        toRender.push_back(object);
 
         GLEngine::Shader shader("shaders\\core\\base.glsl");
         shader.use();
@@ -185,7 +190,7 @@ int main(void)
 
             for (const auto& obj : toRender)
             {
-                obj->getTransform().rotate(0.01f, 0.01f, 0.01f);
+                obj->update();
                 obj->draw({ shader, mainCamera.getViewMatrix() });
             }
 

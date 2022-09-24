@@ -23,19 +23,19 @@ namespace GLEngine
 	{
 		if (angleZ != 0)
 		{
-			glm::vec3 zAxis = glm::column(m_transforms, 2);
+			glm::vec3 zAxis = getForward();
 			m_transforms = glm::rotate(m_transforms, angleZ, zAxis);
 		}
 
 		if (angleY != 0)
 		{
-			glm::vec3 yAxis = glm::column(m_transforms, 1);
+			glm::vec3 yAxis = getUp();
 			m_transforms = glm::rotate(m_transforms, angleY, yAxis);
 		}
 
 		if (angleX != 0)
 		{
-			glm::vec3 xAxis = glm::column(m_transforms, 0);
+			glm::vec3 xAxis = getRight();
 			m_transforms = glm::rotate(m_transforms, angleX, xAxis);
 		}
 	}
@@ -43,5 +43,20 @@ namespace GLEngine
 	const glm::mat4& Transform::getMatrix() const
 	{
 		return m_transforms;
+	}
+
+	const glm::vec3& Transform::getRight() const
+	{
+		return glm::column(m_transforms, 0);
+	}
+
+	const glm::vec3& Transform::getUp() const
+	{
+		return glm::column(m_transforms, 1);
+	}
+
+	const glm::vec3& Transform::getForward() const
+	{
+		return glm::column(m_transforms, 2);
 	}
 }
