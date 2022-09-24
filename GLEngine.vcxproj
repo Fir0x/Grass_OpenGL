@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include;$(SolutionDir)\src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include;$(SolutionDir)\src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include;$(SolutionDir)\src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -146,7 +146,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glfw-3.3.8\include;$(SolutionDir)dependencies\glew-2.1.0\include;$(SolutionDir)dependencies\glm-0.9.9.8;$(SolutionDir)dependencies\stb\include;$(SolutionDir)\src</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -159,46 +159,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\scene\Camera.cpp" />
     <ClCompile Include="src\glWrappers\glError.cpp" />
     <ClCompile Include="src\glWrappers\IndexBuffer.cpp" />
-    <ClCompile Include="src\lights\DirectionalLight.cpp" />
-    <ClCompile Include="src\lights\FallOffLight.cpp" />
-    <ClCompile Include="src\lights\Light.cpp" />
-    <ClCompile Include="src\lights\PointLight.cpp" />
-    <ClCompile Include="src\lights\SpotLight.cpp" />
+    <ClCompile Include="src\scene\lights\DirectionalLight.cpp" />
+    <ClCompile Include="src\scene\lights\FallOffLight.cpp" />
+    <ClCompile Include="src\scene\lights\Light.cpp" />
+    <ClCompile Include="src\scene\lights\PointLight.cpp" />
+    <ClCompile Include="src\scene\lights\SpotLight.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Material.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\MeshRenderer.cpp" />
-    <ClCompile Include="src\Object.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\render\Material.cpp" />
+    <ClCompile Include="src\render\Mesh.cpp" />
+    <ClCompile Include="src\scene\objects\components\MeshRenderer.cpp" />
+    <ClCompile Include="src\scene\objects\Object.cpp" />
+    <ClCompile Include="src\render\Shader.cpp" />
+    <ClCompile Include="src\render\Texture.cpp" />
     <ClCompile Include="src\glWrappers\VertexArray.cpp" />
     <ClCompile Include="src\glWrappers\VertexBuffer.cpp" />
-    <ClCompile Include="src\Transform.cpp" />
+    <ClCompile Include="src\scene\objects\components\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Behavior.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\IDrawable.h" />
+    <ClInclude Include="src\scene\objects\components\Behavior.h" />
+    <ClInclude Include="src\scene\Camera.h" />
+    <ClInclude Include="src\scene\IDrawable.h" />
     <ClInclude Include="src\glWrappers\glError.h" />
     <ClInclude Include="src\glWrappers\IndexBuffer.h" />
-    <ClInclude Include="src\lights\DirectionalLight.h" />
-    <ClInclude Include="src\lights\FallOffLight.h" />
-    <ClInclude Include="src\lights\Light.h" />
-    <ClInclude Include="src\lights\PointLight.h" />
-    <ClInclude Include="src\lights\SpotLight.h" />
-    <ClInclude Include="src\Material.h" />
-    <ClInclude Include="src\Mesh.h" />
-    <ClInclude Include="src\MeshRenderer.h" />
-    <ClInclude Include="src\Object.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\scene\lights\DirectionalLight.h" />
+    <ClInclude Include="src\scene\lights\FallOffLight.h" />
+    <ClInclude Include="src\scene\lights\Light.h" />
+    <ClInclude Include="src\scene\lights\PointLight.h" />
+    <ClInclude Include="src\scene\lights\SpotLight.h" />
+    <ClInclude Include="src\render\Material.h" />
+    <ClInclude Include="src\render\Mesh.h" />
+    <ClInclude Include="src\scene\objects\components\MeshRenderer.h" />
+    <ClInclude Include="src\scene\objects\Object.h" />
+    <ClInclude Include="src\render\Shader.h" />
+    <ClInclude Include="src\render\Texture.h" />
     <ClInclude Include="src\glWrappers\VertexArray.h" />
     <ClInclude Include="src\glWrappers\VertexBuffer.h" />
     <ClInclude Include="src\glWrappers\VertexBufferLayout.h" />
-    <ClInclude Include="src\Transform.h" />
+    <ClInclude Include="src\scene\objects\components\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.glsl" />

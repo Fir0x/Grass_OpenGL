@@ -3,14 +3,14 @@
 #include <glm/ext.hpp>
 #include <iostream>
 
-#include "Shader.h"
+#include "render/Shader.h"
 #include "glWrappers/glError.h"
-#include "Camera.h"
-#include "Object.h"
-#include "Texture.h"
-#include "lights/DirectionalLight.h"
-#include "lights/PointLight.h"
-#include "lights/SpotLight.h"
+#include "scene/Camera.h"
+#include "scene/objects/Object.h"
+#include "render/Texture.h"
+#include "scene/lights/DirectionalLight.h"
+#include "scene/lights/PointLight.h"
+#include "scene/lights/SpotLight.h"
 
 static float lastFrameTime = 0;
 static GLEngine::Camera mainCamera;

@@ -2,11 +2,11 @@
 
 #include <glm/glm.hpp>
 
-#include "Behavior.h"
-#include "Camera.h"
-#include "IDrawable.h"
-#include "MeshRenderer.h"
-#include "Transform.h"
+#include "components/Behavior.h"
+#include "../Camera.h"
+#include "../IDrawable.h"
+#include "components/MeshRenderer.h"
+#include "components/Transform.h"
 
 namespace GLEngine
 {

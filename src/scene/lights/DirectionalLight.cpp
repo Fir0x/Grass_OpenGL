@@ -1,7 +1,5 @@
 #include "DirectionalLight.h"
 
-#include "../Shader.h"
-
 namespace GLEngine
 {
 	DirectionalLight::DirectionalLight(const glm::vec3& color)

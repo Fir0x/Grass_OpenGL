@@ -4,9 +4,9 @@
 #include "glWrappers/VertexArray.h"
 #include "glWrappers/VertexBuffer.h"
 #include "glWrappers/VertexBufferLayout.h"
-#include "IDrawable.h"
-#include "Material.h"
-#include "Mesh.h"
+#include "scene/IDrawable.h"
+#include "render/Material.h"
+#include "render/Mesh.h"
 
 namespace GLEngine
 {
