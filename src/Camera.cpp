@@ -108,12 +108,12 @@ namespace GLEngine
 		return m_viewMat;
 	}
 
-	glm::mat4 Camera::getProjectionMatrix()
+	glm::mat4 Camera::getProjectionMatrix() const
 	{
 		return m_projMat;
 	}
 
-	glm::vec3 Camera::getPosition()
+	glm::vec3 Camera::getPosition() const
 	{
 		return m_pos;
 	}

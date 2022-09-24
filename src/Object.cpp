@@ -9,13 +9,13 @@ namespace GLEngine
 {
 	Object::Object(MeshRenderer* renderer)
 	{
-		m_pos = {0.0f, 0.0f, 0.0f};
+		m_transform = Transform();
 		m_renderer = renderer;
 	}
 
 	Object::Object(const glm::vec3& pos, MeshRenderer* renderer)
 	{
-		m_pos = pos;
+		m_transform = Transform(pos);
 		m_renderer = renderer;
 	}
 
@@ -24,13 +24,21 @@ namespace GLEngine
 		delete m_renderer;
 	}
 
-	glm::mat4 Object::getModelMatrix() const
+	glm::mat3 Object::processNormalMatrix(const glm::mat4& model, const glm::mat4& view) const
 	{
-		return glm::translate(glm::mat4(1.0f), m_pos);
+		return glm::mat3(glm::transpose(glm::inverse(view * model)));
 	}
 
-	void Object::draw(Shader& shader) const
+	Transform& Object::getTransform()
 	{
+		return m_transform;
+	}
+
+	void Object::draw(Shader& shader, Camera& camera) const
+	{
+		const glm::mat4& modelMatrix = m_transform.getMatrix();
+		shader.setUniformMatrix4f("modelMatrix", modelMatrix);
+		shader.setUniformMatrix3f("normalMatrix", processNormalMatrix(modelMatrix, camera.getViewMatrix()));
 		m_renderer->draw(shader);
 	}
 }

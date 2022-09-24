@@ -176,6 +176,7 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\glWrappers\VertexArray.cpp" />
     <ClCompile Include="src\glWrappers\VertexBuffer.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\glWrappers\VertexArray.h" />
     <ClInclude Include="src\glWrappers\VertexBuffer.h" />
     <ClInclude Include="src\glWrappers\VertexBufferLayout.h" />
+    <ClInclude Include="src\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.glsl" />

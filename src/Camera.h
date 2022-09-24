@@ -55,8 +55,8 @@ namespace GLEngine
 		glm::vec3 forward() const;
 
 		glm::mat4 getViewMatrix();
-		glm::mat4 getProjectionMatrix();
-		glm::vec3 getPosition();
+		glm::mat4 getProjectionMatrix() const;
+		glm::vec3 getPosition() const;
 
 		void onScreenSizeChange(int w, int h);
 	};
