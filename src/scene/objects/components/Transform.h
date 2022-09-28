@@ -21,6 +21,12 @@ namespace GLEngine
 		/// <param name="angleY"></param>
 		/// <param name="angleZ"></param>
 		void rotate(float angleX, float angleY, float angleZ);
+		void scale(float scaleX, float scaleY, float scaleZ);
+		/// <summary>
+		/// Scale object on all axis.
+		/// </summary>
+		/// <param name="x"></param>
+		void scale(float x);
 
 		const glm::mat4& getMatrix() const;
 		const glm::vec3 getRight() const;

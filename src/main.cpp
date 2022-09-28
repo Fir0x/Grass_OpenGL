@@ -163,6 +163,7 @@ int main(void)
                 obj->getTransform().rotate(0.01f, 0.01f, 0.01f);
             });
         object->setBehavior(&bhv);
+        object->getTransform().scale(0.5f);
         toRender.push_back(object);
 
         GLEngine::Shader shader("shaders\\core\\base.glsl");

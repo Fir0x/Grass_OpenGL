@@ -40,6 +40,16 @@ namespace GLEngine
 		}
 	}
 
+	void Transform::scale(float scaleX, float scaleY, float scaleZ)
+	{
+		m_transforms = glm::scale(m_transforms, glm::vec3(scaleX, scaleY, scaleZ));
+	}
+
+	void Transform::scale(float x)
+	{
+		m_transforms = glm::scale(m_transforms, glm::vec3(x));
+	}
+
 	const glm::mat4& Transform::getMatrix() const
 	{
 		return m_transforms;
