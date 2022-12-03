@@ -6,7 +6,7 @@
 #include "glWrappers/VertexBufferLayout.h"
 #include "scene/IDrawable.h"
 #include "render/Material.h"
-#include "render/Mesh.h"
+#include "render/StaticMesh.h"
 
 namespace GLEngine
 {
@@ -22,10 +22,10 @@ namespace GLEngine
 
 		unsigned int m_materialId;
 
-		void loadGPUData(const Mesh& mesh);
+		void loadGPUData(const StaticMesh& mesh);
 
 	public:
-		MeshRenderer(const Mesh& mesh);
+		MeshRenderer(const StaticMesh& mesh);
 		~MeshRenderer();
 
 		void setMaterial(unsigned int id);

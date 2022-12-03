@@ -4,7 +4,7 @@
 
 namespace GLEngine
 {
-	void MeshRenderer::loadGPUData(const Mesh& mesh)
+	void MeshRenderer::loadGPUData(const StaticMesh& mesh)
 	{
 		m_renderBuffer = mesh.generateBuffer(m_renderBuffSize);
 		m_vbo = new VertexBuffer(m_renderBuffer, m_renderBuffSize);
@@ -18,7 +18,7 @@ namespace GLEngine
 		m_ib = new IndexBuffer(indices.data(), (int)indices.size());
 	}
 
-	MeshRenderer::MeshRenderer(const Mesh& mesh)
+	MeshRenderer::MeshRenderer(const StaticMesh& mesh)
 	{
 		loadGPUData(mesh);
 		m_materialId = MaterialLibrary::getDefaultId();

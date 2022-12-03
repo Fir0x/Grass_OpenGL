@@ -169,7 +169,7 @@
     <ClCompile Include="src\scene\lights\SpotLight.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render\Material.cpp" />
-    <ClCompile Include="src\render\Mesh.cpp" />
+    <ClCompile Include="src\render\StaticMesh.cpp" />
     <ClCompile Include="src\scene\objects\components\MeshRenderer.cpp" />
     <ClCompile Include="src\scene\objects\Object.cpp" />
     <ClCompile Include="src\render\Shader.cpp" />
@@ -190,7 +190,7 @@
     <ClInclude Include="src\scene\lights\PointLight.h" />
     <ClInclude Include="src\scene\lights\SpotLight.h" />
     <ClInclude Include="src\render\Material.h" />
-    <ClInclude Include="src\render\Mesh.h" />
+    <ClInclude Include="src\render\StaticMesh.h" />
     <ClInclude Include="src\scene\objects\components\MeshRenderer.h" />
     <ClInclude Include="src\scene\objects\Object.h" />
     <ClInclude Include="src\render\Shader.h" />

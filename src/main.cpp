@@ -150,7 +150,7 @@ int main(void)
 
         std::vector<GLEngine::Object*> toRender;
         auto texId = GLEngine::TextureManager::loadTexture("textures\\texture.jpg");
-        auto mesh = GLEngine::Mesh::loadOBJFile("meshes\\cylinder.obj");
+        auto mesh = GLEngine::StaticMesh::loadOBJFile("meshes\\cylinder.obj");
         if (!mesh.has_value())
             return 1;
 

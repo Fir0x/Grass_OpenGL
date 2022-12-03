@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include "StaticMesh.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
@@ -10,22 +10,13 @@
 
 namespace GLEngine
 {
-	int Mesh::addFaceVertex(glm::vec3 coords, glm::vec3 normals, glm::vec2 uvs)
+	StaticMesh::StaticMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
 	{
-		m_vertices.push_back({ coords, normals, uvs });
-
-		int index = (int)(m_vertices.size() - 1);
-		m_indices.push_back(index);
-
-		return index;
+		m_vertices = vertices;
+		m_indices = indices;
 	}
 
-	void Mesh::addFaceVertex(int index)
-	{
-		m_indices.push_back(index);
-	}
-
-	float* Mesh::generateBuffer(size_t &size) const
+	float* StaticMesh::generateBuffer(size_t &size) const
 	{
 		size = m_vertices.size() * sizeof(float) * 11;
 		float* buffer = (float*)malloc(size);
@@ -41,17 +32,17 @@ namespace GLEngine
 		return buffer;
 	}
 
-	size_t Mesh::triangleCount() const
+	size_t StaticMesh::triangleCount() const
 	{
 		return m_indices.size() / 3;
 	}
 
-	const std::vector<unsigned int>& Mesh::getIndices() const
+	const std::vector<unsigned int>& StaticMesh::getIndices() const
 	{
 		return m_indices;
 	}
 
-	void Mesh::writeBufferAsOBJ(const char* path)
+	void StaticMesh::writeBufferAsOBJ(const char* path)
 	{
 		std::ofstream stream;
 		stream.open(path);
@@ -111,21 +102,21 @@ namespace GLEngine
 		return splitted;
 	}
 
-	std::optional<Mesh> Mesh::loadOBJFile(const std::string& path)
+	std::optional<StaticMesh> StaticMesh::loadOBJFile(const std::string& path)
 	{
 		std::ifstream stream;
 		stream.open(path);
 
-		std::vector<Mesh> meshes;
-
 		if (stream.is_open())
 		{
-			Mesh mesh;
 			bool secondMesh = false;
 
 			std::vector<glm::vec3> vertices;
 			std::vector<glm::vec3> normals;
 			std::vector<glm::vec2> uvs;
+
+			std::vector<Vertex> mesh_vertices;
+			std::vector<unsigned int> mesh_indices;
 
 			struct VertexInfo
 			{
@@ -140,7 +131,6 @@ namespace GLEngine
 			};
 			std::map<VertexInfo, int> indexMapper;
 
-			std::string folder = path.substr(0, path.find_last_of('\\') + 1);
 			std::string line;
 			while (std::getline(stream, line))
 			{
@@ -155,7 +145,7 @@ namespace GLEngine
 						std::cerr << "WARNING: " << path
 							<< " contained more than one mesh definition. "
 							<< "Only the first one was parsed.";
-						return mesh;
+						return StaticMesh(mesh_vertices, mesh_indices);
 					}
 				}
 				else if (line[0] == 'v')
@@ -199,22 +189,26 @@ namespace GLEngine
 							glm::vec3 v = vertices.at(vertIdx);
 							glm::vec3 n = normals.at(normIdx);
 							glm::vec2 uv = uvs.at(uvIdx);
-							indexMapper.insert({ vInfo, mesh.addFaceVertex(v, n, uv) });
+
+							mesh_vertices.push_back({ v, n, uv });
+							int vertexIndex = mesh_vertices.size() - 1;
+							mesh_indices.push_back(vertexIndex);
+							indexMapper.insert({ vInfo, vertexIndex });
 						}
 						else
 						{
-							mesh.addFaceVertex(indexMapper[vInfo]);
+							mesh_indices.push_back(indexMapper[vInfo]);
 						}
 					}
 				}
 			}
 
-			return mesh;
+			return StaticMesh(mesh_vertices, mesh_indices);
 		}
 		else
 		{
 			std::cerr << "Failed to open OBJ file at " << path << "\n";
-			return std::optional<Mesh>();
+			return std::optional<StaticMesh>();
 		}
 	}
 }

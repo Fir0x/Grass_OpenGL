@@ -33,7 +33,7 @@
     <ClCompile Include="src\glWrappers\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\Mesh.cpp">
+    <ClCompile Include="src\render\StaticMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\Camera.cpp">
@@ -89,7 +89,7 @@
     <ClInclude Include="src\glWrappers\VertexBufferLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\Mesh.h">
+    <ClInclude Include="src\render\StaticMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\Camera.h">
