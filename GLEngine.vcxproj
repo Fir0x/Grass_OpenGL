@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\scene\Camera.cpp" />
     <ClCompile Include="src\glWrappers\glError.cpp" />
     <ClCompile Include="src\glWrappers\IndexBuffer.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\scene\objects\components\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\scene\objects\components\Behavior.h" />
     <ClInclude Include="src\scene\Camera.h" />
     <ClInclude Include="src\scene\IDrawable.h" />
