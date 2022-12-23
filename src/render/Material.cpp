@@ -8,6 +8,7 @@
 
 namespace GLEngine
 {
+
 	Material::Material(const std::string& name)
 	{
 		m_name = name;
@@ -15,9 +16,8 @@ namespace GLEngine
 		m_diffuse = glm::vec3(1.0f);
 		m_specular = glm::vec3(1.0f);
 
-		unsigned int defaultId = TextureManager::getDefaultTexture()->getId();
-		m_diffuseTex = defaultId;
-		m_specularTex = defaultId;
+		m_diffuseTex = nullptr;
+		m_specularTex = nullptr;
 	}
 
 	Material& Material::setName(const std::string& name)
@@ -46,13 +46,13 @@ namespace GLEngine
 
 	Material& Material::setDiffuseTex(const std::string& path)
 	{
-		m_diffuseTex = TextureManager::loadTexture(path);
+		m_diffuseTex = Texture::fromFile(path);
 		return *this;
 	}
 
 	Material& Material::setSpecularTex(const std::string& path)
 	{
-		m_specularTex = TextureManager::loadTexture(path);
+		m_specularTex = Texture::fromFile(path);
 		return *this;
 	}
 
@@ -61,10 +61,23 @@ namespace GLEngine
 		shader.setUniform3f("material.diffuse", m_diffuse);
 		shader.setUniform3f("material.specular", m_ambient);
 		shader.setUniform1f("material.shininess", 32.0f);
-		GLEngine::TextureManager::getTexture(m_diffuseTex)->bindToUnit(0);
-		shader.setUniform1i("material.diffuseTex", 0);
-		GLEngine::TextureManager::getTexture(m_specularTex)->bindToUnit(1);
-		shader.setUniform1i("material.specularTex", 1);
+		if (m_diffuseTex)
+		{
+			m_diffuseTex->bindToUnit(0);
+			shader.setUniform1i("material.diffuseTex", 0);
+			shader.setUniform1i("useDiffuseTex", 1);
+		}
+		else
+			shader.setUniform1i("useDiffuseTex", 0);
+
+		if (m_specularTex)
+		{
+			m_specularTex->bindToUnit(1);
+			shader.setUniform1i("material.specularTex", 1);
+			shader.setUniform1i("useSpecularTex", 1);
+		}
+		else
+			shader.setUniform1i("useSpecularTex", 0);
 	}
 
 	static std::vector<std::string> splitstr(const std::string& str, char delim)

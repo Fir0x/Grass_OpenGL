@@ -82,7 +82,7 @@ int main(void)
         glfwSetFramebufferSizeCallback(window, screen_size_callback);
 
         std::vector<GLEngine::Object*> toRender;
-        auto texId = GLEngine::TextureManager::loadTexture("textures\\texture.jpg");
+        auto texture = GLEngine::Texture::fromFile("textures\\texture.jpg");
         auto mesh = GLEngine::StaticMesh::loadOBJFile("meshes\\cylinder.obj");
         if (!mesh.has_value())
             return 1;
@@ -91,6 +91,7 @@ int main(void)
 
         auto renderer = new GLEngine::MeshRenderer(mesh.value());
         renderer->setMaterial(matId);
+
         auto* object = new GLEngine::Object(renderer);
         GLEngine::QuickBehavior bhv([](GLEngine::Object* obj) {
                 obj->getTransform().rotate(0.01f, 0.01f, 0.01f);
@@ -143,7 +144,6 @@ int main(void)
         {
             delete obj;
         }
-        GLEngine::TextureManager::clean();
     }
 
     glfwTerminate();

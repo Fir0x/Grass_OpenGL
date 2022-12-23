@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Shader.h"
+#include "Texture.h"
 
 namespace GLEngine
 {
@@ -17,8 +18,8 @@ namespace GLEngine
 		glm::vec3 m_diffuse;
 		glm::vec3 m_specular;
 
-		unsigned int m_diffuseTex;
-		unsigned int m_specularTex;
+		std::shared_ptr<Texture> m_diffuseTex;
+		std::shared_ptr<Texture> m_specularTex;
 
 	public:
 		Material(const std::string& name);
