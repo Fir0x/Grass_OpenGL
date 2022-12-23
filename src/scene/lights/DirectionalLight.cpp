@@ -17,7 +17,7 @@ namespace GLEngine
 	void DirectionalLight::SetupShaderProperties(Program& shader, int i) const
 	{
 		std::string prefix = "dirLight[" + std::to_string(i) + "].";
-		shader.setUniform3f((prefix + "color").c_str(), m_color);
-		shader.setUniform3f((prefix + "direction").c_str(), m_direction);
+		shader.setUniform((prefix + "color").c_str(), m_color);
+		shader.setUniform((prefix + "direction").c_str(), m_direction);
 	}
 }

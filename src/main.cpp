@@ -99,8 +99,8 @@ int main(void)
         object->getTransform().scale(0.5f);
         toRender.push_back(object);
 
-        GLEngine::Program shader("shaders\\core\\base.glsl");
-        shader.use();
+        auto shader = GLEngine::Program::fromFiles("shaders\\core\\base.vert", "shaders\\core\\base.frag");
+        shader->use();
         glm::vec3 white(1.0f);
         GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));
         GLEngine::PointLight pointLight1(white, glm::vec3(3.0f, 0.0f, 0.0f), 100);
@@ -111,15 +111,15 @@ int main(void)
         {
             processInput(window);
 
-            shader.setUniformMatrix4f("projectionMatrix", mainCamera.getProjectionMatrix());
-            shader.setUniformMatrix4f("viewMatrix", mainCamera.getViewMatrix());
-            shader.setUniform3f("viewPos", mainCamera.getPosition());
+            shader->setUniform("projectionMatrix", mainCamera.getProjectionMatrix());
+            shader->setUniform("viewMatrix", mainCamera.getViewMatrix());
+            shader->setUniform("viewPos", mainCamera.getPosition());
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             //dirLight.SetupShaderProperties(shader, 0);
-            pointLight1.SetupShaderProperties(shader, 0);
-            pointLight2.SetupShaderProperties(shader, 1);
+            pointLight1.SetupShaderProperties(*shader, 0);
+            pointLight2.SetupShaderProperties(*shader, 1);
             //spotLight.SetupShaderProperties(shader, 0);
 
             // Update step
@@ -131,7 +131,7 @@ int main(void)
             // Draw step
             for (const auto& obj : toRender)
             {
-                obj->draw({ shader, mainCamera.getViewMatrix() });
+                obj->draw({ *shader, mainCamera.getViewMatrix() });
             }
 
             glfwSwapBuffers(window);

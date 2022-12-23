@@ -141,5 +141,7 @@
   <ItemGroup>
     <None Include="shaders\core\base.glsl" />
     <None Include="shaders\debug\debug_lighting.glsl" />
+    <None Include="shaders\core\base.vert" />
+    <None Include="shaders\core\base.frag" />
   </ItemGroup>
 </Project>

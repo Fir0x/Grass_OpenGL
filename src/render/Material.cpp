@@ -58,26 +58,26 @@ namespace GLEngine
 
 	void Material::loadToGPU(Program& shader) const
 	{
-		shader.setUniform3f("material.diffuse", m_diffuse);
-		shader.setUniform3f("material.specular", m_ambient);
-		shader.setUniform1f("material.shininess", 32.0f);
+		shader.setUniform("material.diffuse", m_diffuse);
+		shader.setUniform("material.specular", m_ambient);
+		shader.setUniform("material.shininess", 32.0f);
 		if (m_diffuseTex)
 		{
 			m_diffuseTex->bindToUnit(0);
-			shader.setUniform1i("material.diffuseTex", 0);
-			shader.setUniform1i("useDiffuseTex", 1);
+			shader.setUniform("material.diffuseTex", 0);
+			shader.setUniform("useDiffuseTex", 1);
 		}
 		else
-			shader.setUniform1i("useDiffuseTex", 0);
+			shader.setUniform("useDiffuseTex", 0);
 
 		if (m_specularTex)
 		{
 			m_specularTex->bindToUnit(1);
-			shader.setUniform1i("material.specularTex", 1);
-			shader.setUniform1i("useSpecularTex", 1);
+			shader.setUniform("material.specularTex", 1);
+			shader.setUniform("useSpecularTex", 1);
 		}
 		else
-			shader.setUniform1i("useSpecularTex", 0);
+			shader.setUniform("useSpecularTex", 0);
 	}
 
 	static std::vector<std::string> splitstr(const std::string& str, char delim)

@@ -45,8 +45,8 @@ namespace GLEngine
 	void Object::draw(const DrawContext& context) const
 	{
 		const glm::mat4& modelMatrix = m_transform.getMatrix();
-		context.currentShader.setUniformMatrix4f("modelMatrix", modelMatrix);
-		context.currentShader.setUniformMatrix3f("normalMatrix", processNormalMatrix(modelMatrix, context.viewMatrix));
+		context.currentShader.setUniform("modelMatrix", modelMatrix);
+		context.currentShader.setUniform("normalMatrix", processNormalMatrix(modelMatrix, context.viewMatrix));
 		m_renderer->draw(context);
 	}
 }

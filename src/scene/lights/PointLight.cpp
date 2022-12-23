@@ -22,11 +22,11 @@ namespace GLEngine
 	void PointLight::SetupShaderProperties(Program& shader, int i) const
 	{
 		std::string prefix = "pointLight[" + std::to_string(i) + "].";
-		shader.setUniform3f((prefix + "color").c_str(), m_color);
-		shader.setUniform3f((prefix + "position").c_str(), m_position);
+		shader.setUniform((prefix + "color").c_str(), m_color);
+		shader.setUniform((prefix + "position").c_str(), m_position);
 
-		shader.setUniform1f((prefix + "constant").c_str(), m_constant);
-		shader.setUniform1f((prefix + "linear").c_str(), m_linear);
-		shader.setUniform1f((prefix + "quadratic").c_str(), m_quadratic);
+		shader.setUniform((prefix + "constant").c_str(), m_constant);
+		shader.setUniform((prefix + "linear").c_str(), m_linear);
+		shader.setUniform((prefix + "quadratic").c_str(), m_quadratic);
 	}
 }

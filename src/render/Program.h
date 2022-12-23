@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <unordered_map>
 #include <string>
 
@@ -19,22 +20,22 @@ namespace GLEngine
 		unsigned int m_id;
 		std::unordered_map<std::string, int> locations;
 
-		ShaderSources parse_shader_file(const char* path);
-		unsigned int compile_shader(const std::string &path, unsigned int type);
 		int getUniformLocation(const char* name);
 
 	public:
-		Program(const char* path);
+		Program(const std::string& vertex_src, const std::string& fragment_src);
 		~Program();
+
+		static std::shared_ptr<Program> fromFiles(const std::string& vertex_path, const std::string& fragment_path);
 
 		void use();
 
-		void setUniform1i(const char* name, int v0);
-		void setUniform1f(const char* name, float v0);
-		void setUniform3f(const char* name, float v0, float v1, float v2);
-		void setUniform3f(const char* name, const glm::vec3& v);
-		void setUniform4f(const char* name, float v0, float v1, float v2, float v3);
-		void setUniformMatrix3f(const char* name, glm::mat3 matrix, bool transpose = false);
-		void setUniformMatrix4f(const char* name, glm::mat4 matrix, bool transpose = false);
+		void setUniform(const char* name, int v0);
+		void setUniform(const char* name, float v0);
+		void setUniform(const char* name, float v0, float v1, float v2);
+		void setUniform(const char* name, const glm::vec3& v);
+		void setUniform(const char* name, float v0, float v1, float v2, float v3);
+		void setUniform(const char* name, glm::mat3 matrix, bool transpose = false);
+		void setUniform(const char* name, glm::mat4 matrix, bool transpose = false);
 	};
 }
