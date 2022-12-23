@@ -56,7 +56,7 @@ namespace GLEngine
 		return *this;
 	}
 
-	void Material::loadToGPU(Shader& shader) const
+	void Material::loadToGPU(Program& shader) const
 	{
 		shader.setUniform3f("material.diffuse", m_diffuse);
 		shader.setUniform3f("material.specular", m_ambient);
@@ -190,7 +190,7 @@ namespace GLEngine
 		return 0;
 	}
 
-	void MaterialLibrary::useMaterial(unsigned int id, Shader& shader)
+	void MaterialLibrary::useMaterial(unsigned int id, Program& shader)
 	{
 		MaterialLibrary& instance = getInstance();
 		if (instance.m_library.find(id) != instance.m_library.end())

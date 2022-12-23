@@ -22,7 +22,7 @@ namespace GLEngine
 		m_outCutOff = outCutOff;
 	}
 
-	void SpotLight::SetupShaderProperties(Shader& shader, int i) const
+	void SpotLight::SetupShaderProperties(Program& shader, int i) const
 	{
 		std::string prefix = "spotLight[" + std::to_string(i) + "].";
 		shader.setUniform3f((prefix + "color").c_str(), m_color);

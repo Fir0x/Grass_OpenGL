@@ -1,12 +1,12 @@
 #pragma once
 
-#include "render/Shader.h"
+#include "render/Program.h"
 
 namespace GLEngine
 {
 	struct DrawContext
 	{
-		Shader& currentShader;
+		Program& currentShader;
 		glm::mat4 viewMatrix;
 	};
 

@@ -173,7 +173,7 @@
     <ClCompile Include="src\render\StaticMesh.cpp" />
     <ClCompile Include="src\scene\objects\components\MeshRenderer.cpp" />
     <ClCompile Include="src\scene\objects\Object.cpp" />
-    <ClCompile Include="src\render\Shader.cpp" />
+    <ClCompile Include="src\render\Program.cpp" />
     <ClCompile Include="src\render\Texture.cpp" />
     <ClCompile Include="src\glWrappers\VertexArray.cpp" />
     <ClCompile Include="src\glWrappers\VertexBuffer.cpp" />
@@ -195,7 +195,7 @@
     <ClInclude Include="src\render\StaticMesh.h" />
     <ClInclude Include="src\scene\objects\components\MeshRenderer.h" />
     <ClInclude Include="src\scene\objects\Object.h" />
-    <ClInclude Include="src\render\Shader.h" />
+    <ClInclude Include="src\render\Program.h" />
     <ClInclude Include="src\render\Texture.h" />
     <ClInclude Include="src\glWrappers\VertexArray.h" />
     <ClInclude Include="src\glWrappers\VertexBuffer.h" />

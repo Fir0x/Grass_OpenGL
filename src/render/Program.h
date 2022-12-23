@@ -13,7 +13,7 @@ namespace GLEngine
 		std::string fragmentShader;
 	};
 
-	class Shader
+	class Program
 	{
 	private:
 		unsigned int m_id;
@@ -24,8 +24,8 @@ namespace GLEngine
 		int getUniformLocation(const char* name);
 
 	public:
-		Shader(const char* path);
-		~Shader();
+		Program(const char* path);
+		~Program();
 
 		void use();
 

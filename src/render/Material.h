@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-#include "Shader.h"
+#include "Program.h"
 #include "Texture.h"
 
 namespace GLEngine
@@ -31,7 +31,7 @@ namespace GLEngine
 		Material& setDiffuseTex(const std::string& path);
 		Material& setSpecularTex(const std::string& path);
 
-		void loadToGPU(Shader& shader) const;
+		void loadToGPU(Program& shader) const;
 
 		static std::optional<Material> loadFromMtl(const std::string path);
 	};
@@ -47,7 +47,7 @@ namespace GLEngine
 
 	public:
 		static unsigned int loadFromMtl(const std::string& path);
-		static void useMaterial(unsigned int id, Shader& shader);
+		static void useMaterial(unsigned int id, Program& shader);
 		static unsigned int getDefaultId();
 	};
 }

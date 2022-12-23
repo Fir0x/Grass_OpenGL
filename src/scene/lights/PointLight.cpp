@@ -19,7 +19,7 @@ namespace GLEngine
 		m_radius = range;
 	}
 
-	void PointLight::SetupShaderProperties(Shader& shader, int i) const
+	void PointLight::SetupShaderProperties(Program& shader, int i) const
 	{
 		std::string prefix = "pointLight[" + std::to_string(i) + "].";
 		shader.setUniform3f((prefix + "color").c_str(), m_color);

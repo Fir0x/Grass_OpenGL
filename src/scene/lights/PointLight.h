@@ -15,6 +15,6 @@ namespace GLEngine
 	public:
 		PointLight(const glm::vec3& color, const glm::vec3& position, float range);
 
-		virtual void SetupShaderProperties(Shader& shader, int i) const override;
+		virtual void SetupShaderProperties(Program& shader, int i) const override;
 	};
 }

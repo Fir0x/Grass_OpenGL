@@ -27,7 +27,7 @@
     <ClCompile Include="src\glWrappers\glError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\render\Shader.cpp">
+    <ClCompile Include="src\render\Program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\glWrappers\IndexBuffer.cpp">
@@ -83,7 +83,7 @@
     <ClInclude Include="src\glWrappers\glError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\render\Shader.h">
+    <ClInclude Include="src\render\Program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\glWrappers\IndexBuffer.h">

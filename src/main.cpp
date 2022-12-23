@@ -3,7 +3,7 @@
 #include <glm/ext.hpp>
 #include <iostream>
 
-#include "render/Shader.h"
+#include "render/Program.h"
 #include "glWrappers/glError.h"
 #include "scene/Camera.h"
 #include "scene/objects/Object.h"
@@ -82,7 +82,6 @@ int main(void)
         glfwSetFramebufferSizeCallback(window, screen_size_callback);
 
         std::vector<GLEngine::Object*> toRender;
-        auto texture = GLEngine::Texture::fromFile("textures\\texture.jpg");
         auto mesh = GLEngine::StaticMesh::loadOBJFile("meshes\\cylinder.obj");
         if (!mesh.has_value())
             return 1;
@@ -100,7 +99,7 @@ int main(void)
         object->getTransform().scale(0.5f);
         toRender.push_back(object);
 
-        GLEngine::Shader shader("shaders\\core\\base.glsl");
+        GLEngine::Program shader("shaders\\core\\base.glsl");
         shader.use();
         glm::vec3 white(1.0f);
         GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));

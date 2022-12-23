@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "render/Shader.h"
+#include "render/Program.h"
 
 namespace GLEngine
 {
@@ -19,7 +19,7 @@ namespace GLEngine
 		/// </summary>
 		/// <param name="shader"></param>
 		/// <param name="i">Index of the light.</param>
-		virtual void SetupShaderProperties(Shader& shader, int i) const = 0;
+		virtual void SetupShaderProperties(Program& shader, int i) const = 0;
 
 		template <class T>
 		static T getFiller()

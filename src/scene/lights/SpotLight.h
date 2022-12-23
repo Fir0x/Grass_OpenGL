@@ -17,6 +17,6 @@ namespace GLEngine
 	public:
 		SpotLight(const glm::vec3& color, const glm::vec3& position, const glm::vec3& direction, float inCutOff, float outCutOff, float range);
 
-		virtual void SetupShaderProperties(Shader& shader, int i) const override;
+		virtual void SetupShaderProperties(Program& shader, int i) const override;
 	};
 }

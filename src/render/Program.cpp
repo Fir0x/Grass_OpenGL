@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "Program.h"
 
 #include <GL/glew.h>
 #include <glm/ext.hpp>
@@ -10,7 +10,7 @@
 
 namespace GLEngine
 {
-	ShaderSources Shader::parse_shader_file(const char *path)
+	ShaderSources Program::parse_shader_file(const char *path)
 	{
 		ShaderSources sources;
 
@@ -46,7 +46,7 @@ namespace GLEngine
 		return sources;
 	}
 
-	unsigned int Shader::compile_shader(const std::string& source, unsigned int type)
+	unsigned int Program::compile_shader(const std::string& source, unsigned int type)
 	{
 		unsigned int id = glCreateShader(type); GL_AFTER_CHECK();
 
@@ -78,7 +78,7 @@ namespace GLEngine
 
 	}
 
-	int Shader::getUniformLocation(const char* name)
+	int Program::getUniformLocation(const char* name)
 	{
 		if (locations.find(name) == locations.end())
 		{
@@ -89,7 +89,7 @@ namespace GLEngine
 		return locations.at(name);
 	}
 
-	Shader::Shader(const char* path)
+	Program::Program(const char* path)
 	{
 		m_id = glCreateProgram(); GL_AFTER_CHECK();
 
@@ -130,52 +130,52 @@ namespace GLEngine
 		GL_CALL(glDeleteShader(fragment));
 	}
 
-	Shader::~Shader()
+	Program::~Program()
 	{
 		GL_CALL(glDeleteProgram(m_id));
 	}
 
-	void Shader::use()
+	void Program::use()
 	{
 		GL_CALL(glUseProgram(m_id));
 	}
 
-	void Shader::setUniform1i(const char* name, int v0)
+	void Program::setUniform1i(const char* name, int v0)
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniform1i(location, v0));
 	}
 
-	void Shader::setUniform1f(const char* name, float v0)
+	void Program::setUniform1f(const char* name, float v0)
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniform1f(location, v0));
 	}
 
-	void Shader::setUniform3f(const char* name, float v0, float v1, float v2)
+	void Program::setUniform3f(const char* name, float v0, float v1, float v2)
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniform3f(location, v0, v1, v2));
 	}
 
-	void Shader::setUniform3f(const char* name, const glm::vec3& v)
+	void Program::setUniform3f(const char* name, const glm::vec3& v)
 	{
 		setUniform3f(name, v.x, v.y, v.z);
 	}
 
-	void Shader::setUniform4f(const char* name, float v0, float v1, float v2, float v3)
+	void Program::setUniform4f(const char* name, float v0, float v1, float v2, float v3)
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniform4f(location, v0, v1, v2, v3));
 	}
 
-	void Shader::setUniformMatrix3f(const char* name, glm::mat3 matrix, bool transpose)
+	void Program::setUniformMatrix3f(const char* name, glm::mat3 matrix, bool transpose)
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniformMatrix3fv(location, 1, transpose ? GL_TRUE : GL_FALSE, glm::value_ptr(matrix)));
 	}
 
-	void Shader::setUniformMatrix4f(const char* name, glm::mat4 matrix, bool transpose)
+	void Program::setUniformMatrix4f(const char* name, glm::mat4 matrix, bool transpose)
 	{
 		int location = getUniformLocation(name);
 		GL_CALL(glUniformMatrix4fv(location, 1, transpose ? GL_TRUE : GL_FALSE, glm::value_ptr(matrix)));
