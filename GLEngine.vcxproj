@@ -204,7 +204,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.frag" />
-    <None Include="shaders\core\base.glsl" />
     <None Include="shaders\core\base.vert" />
     <None Include="shaders\debug\debug_lighting.glsl" />
   </ItemGroup>
