@@ -6,8 +6,8 @@ namespace GLEngine
 {
 	void MeshRenderer::loadGPUData(const StaticMesh& mesh)
 	{
-		m_renderBuffer = mesh.generateBuffer(m_renderBuffSize);
-		m_vbo = new ByteBuffer(m_renderBuffer, m_renderBuffSize);
+		const auto& verticesData = mesh.getData();
+		m_vbo = new TypedBuffer<StaticMesh::Vertex>(verticesData.data(), verticesData.size());
 
 		VertexBufferLayout layout;
 		layout.Add<float>(3);
@@ -27,7 +27,6 @@ namespace GLEngine
 
 	MeshRenderer::~MeshRenderer()
 	{
-		free(m_renderBuffer);
 		delete m_ibo;
 		delete m_vao;
 		delete m_vbo;

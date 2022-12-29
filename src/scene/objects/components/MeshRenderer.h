@@ -12,10 +12,7 @@ namespace GLEngine
 	class MeshRenderer : IDrawable
 	{
 	private:
-		float* m_renderBuffer;
-		size_t m_renderBuffSize;
-
-		ByteBuffer* m_vbo;
+		TypedBuffer<StaticMesh::Vertex>* m_vbo;
 		VertexArray* m_vao;
 		TypedBuffer<unsigned int>* m_ibo;
 

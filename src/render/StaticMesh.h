@@ -26,21 +26,10 @@ namespace GLEngine
 	public:
 		StaticMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
-		/// <summary>
-		/// Allocate an interleaved buffer to pass to a VBO.
-		/// </summary>
-		/// <returns></returns>
-		float* generateBuffer(size_t &size) const;
+		const std::vector<Vertex>& getData() const;
 
 		size_t triangleCount() const;
 		const std::vector<unsigned int>& getIndices() const;
-
-		/// <summary>
-		/// Write buffer representation as an OBJ file.
-		/// Used to check if buffer is well encoded.
-		/// </summary>
-		/// <param name="path"></param>
-		void writeBufferAsOBJ(const char* path);
 
 		static std::optional<StaticMesh> loadOBJFile(const std::string& path);
 	};
