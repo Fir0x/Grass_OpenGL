@@ -159,10 +159,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\glWrappers\ByteBuffer.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\scene\Camera.cpp" />
     <ClCompile Include="src\glWrappers\glError.cpp" />
-    <ClCompile Include="src\glWrappers\IndexBuffer.cpp" />
     <ClCompile Include="src\scene\lights\DirectionalLight.cpp" />
     <ClCompile Include="src\scene\lights\FallOffLight.cpp" />
     <ClCompile Include="src\scene\lights\Light.cpp" />
@@ -176,16 +176,16 @@
     <ClCompile Include="src\render\Program.cpp" />
     <ClCompile Include="src\render\Texture.cpp" />
     <ClCompile Include="src\glWrappers\VertexArray.cpp" />
-    <ClCompile Include="src\glWrappers\VertexBuffer.cpp" />
     <ClCompile Include="src\scene\objects\components\Transform.cpp" />
+    <ClCompile Include="src\glWrappers\TypedBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\glWrappers\ByteBuffer.h" />
     <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\scene\objects\components\Behavior.h" />
     <ClInclude Include="src\scene\Camera.h" />
     <ClInclude Include="src\scene\IDrawable.h" />
     <ClInclude Include="src\glWrappers\glError.h" />
-    <ClInclude Include="src\glWrappers\IndexBuffer.h" />
     <ClInclude Include="src\scene\lights\DirectionalLight.h" />
     <ClInclude Include="src\scene\lights\FallOffLight.h" />
     <ClInclude Include="src\scene\lights\Light.h" />
@@ -198,9 +198,9 @@
     <ClInclude Include="src\render\Program.h" />
     <ClInclude Include="src\render\Texture.h" />
     <ClInclude Include="src\glWrappers\VertexArray.h" />
-    <ClInclude Include="src\glWrappers\VertexBuffer.h" />
     <ClInclude Include="src\glWrappers\VertexBufferLayout.h" />
     <ClInclude Include="src\scene\objects\components\Transform.h" />
+    <ClInclude Include="src\glWrappers\TypedBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.frag" />

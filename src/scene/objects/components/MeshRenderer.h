@@ -1,8 +1,7 @@
 #pragma once
 
-#include "glWrappers/IndexBuffer.h"
+#include "glWrappers/TypedBuffer.h"
 #include "glWrappers/VertexArray.h"
-#include "glWrappers/VertexBuffer.h"
 #include "glWrappers/VertexBufferLayout.h"
 #include "scene/IDrawable.h"
 #include "render/Material.h"
@@ -16,9 +15,9 @@ namespace GLEngine
 		float* m_renderBuffer;
 		size_t m_renderBuffSize;
 
-		VertexBuffer* m_vbo;
+		ByteBuffer* m_vbo;
 		VertexArray* m_vao;
-		IndexBuffer* m_ib;
+		TypedBuffer<unsigned int>* m_ibo;
 
 		unsigned int m_materialId;
 
