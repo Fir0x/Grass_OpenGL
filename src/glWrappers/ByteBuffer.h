@@ -14,7 +14,8 @@ namespace GLEngine
 		enum UsageType
 		{
 			VertexBuffer,
-			IndexBuffer
+			IndexBuffer,
+			UniformBuffer
 		};
 
 		enum AccessType
@@ -28,6 +29,11 @@ namespace GLEngine
 		~ByteBuffer();
 
 		void bind(UsageType usageType) const;
+		/// <summary>
+		/// Bind a buffer as a uniform buffer on a binding point..
+		/// </summary>
+		/// <param name="bindingPoint"></param>
+		void bind(int bindingPoint) const;
 		void setAccess(AccessType accessType) const;
 	};
 }

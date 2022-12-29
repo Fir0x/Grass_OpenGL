@@ -49,7 +49,15 @@ uniform DirLight dirLight[MAX_DIR_LIGHT];
 uniform PointLight pointLight[MAX_POINT_LIGHT];
 uniform SpotLight spotLight[MAX_SPOT_LIGHT];
 
-uniform mat4 viewMatrix;
+struct FrameContext
+{
+	mat4 viewMatrix;
+	mat4 projectionMatrix;
+};
+
+layout(binding = 0) uniform Data {
+	FrameContext frame;
+};
 
 uniform bool useDiffuseTex;
 uniform bool useSpecularTex;
@@ -61,7 +69,7 @@ in vec3 fragNormal;
 vec3 processDirectionalLight(DirLight light)
 {
 	vec3 normal = normalize(fragNormal);
-	vec3 lightDir = vec3(viewMatrix * vec4(-light.direction, 0.0));
+	vec3 lightDir = vec3(frame.viewMatrix * vec4(-light.direction, 0.0));
 	float lightCos = dot(normal, lightDir);
 	vec3 mtlDiffuse = material.diffuse;
 	if (useDiffuseTex)
@@ -82,7 +90,7 @@ vec3 processDirectionalLight(DirLight light)
 vec3 processPointLight(PointLight light)
 {
 	vec3 normal = normalize(fragNormal);
-	vec3 lightDir = normalize(vec3(viewMatrix * vec4(light.position, 1.0)) - fragPos);
+	vec3 lightDir = normalize(vec3(frame.viewMatrix * vec4(light.position, 1.0)) - fragPos);
 	float lightCos = dot(normal, lightDir);
 	vec3 mtlDiffuse = material.diffuse;
 	if (useDiffuseTex)
@@ -108,8 +116,8 @@ vec3 processPointLight(PointLight light)
 
 vec3 processSpotLight(SpotLight light)
 {
-	vec3 lightDir = normalize(vec3(viewMatrix * vec4(light.position, 1.0)) - fragPos);
-	float theta = dot(lightDir, vec3(viewMatrix * vec4(-light.direction, 0.0)));
+	vec3 lightDir = normalize(vec3(frame.viewMatrix * vec4(light.position, 1.0)) - fragPos);
+	float theta = dot(lightDir, vec3(frame.viewMatrix * vec4(-light.direction, 0.0)));
 	float epsilon = light.inCutOff - light.outCutOff;
 	float intensity = clamp((theta - light.outCutOff) / epsilon, 0.0, 1.0);
 	

@@ -28,6 +28,8 @@ namespace GLEngine
 			return GL_ARRAY_BUFFER;
 		case ByteBuffer::IndexBuffer:
 			return GL_ELEMENT_ARRAY_BUFFER;
+		case ByteBuffer::UsageType::UniformBuffer:
+			return GL_UNIFORM_BUFFER;
 		}
 	}
 
@@ -44,6 +46,11 @@ namespace GLEngine
 	void ByteBuffer::bind(UsageType usageType) const
 	{
 		GL_CALL(glBindBuffer(usageType2GL(usageType), m_id));
+	}
+
+	void ByteBuffer::bind(int bindingPoint) const
+	{
+		glBindBufferBase(usageType2GL(UsageType::UniformBuffer), bindingPoint, m_id);
 	}
 
 	void ByteBuffer::setAccess(AccessType accessType) const

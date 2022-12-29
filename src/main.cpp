@@ -107,13 +107,19 @@ int main(void)
         GLEngine::PointLight pointLight2(white, glm::vec3(-3.0f, 0.0f, 0.0f), 100);
         GLEngine::SpotLight spotLight(white, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 25.0f, 35.0f, 100);
 
+        struct FrameContext
+        {
+            glm::mat4 viewMatrix;
+            glm::mat4 projectionMatrix;
+        };
+
         while (!glfwWindowShouldClose(window))
         {
             processInput(window);
 
-            shader->setUniform("projectionMatrix", mainCamera.getProjectionMatrix());
-            shader->setUniform("viewMatrix", mainCamera.getViewMatrix());
-            shader->setUniform("viewPos", mainCamera.getPosition());
+            FrameContext context = { mainCamera.getViewMatrix(), mainCamera.getProjectionMatrix() };
+            GLEngine::TypedBuffer<FrameContext> contextBuffer(&context, 1);
+            contextBuffer.bind(0);
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
