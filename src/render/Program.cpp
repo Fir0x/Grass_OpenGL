@@ -27,8 +27,19 @@ namespace GLEngine
 			char* log = (char*)std::malloc(log_size * sizeof(char));
 			if (log != nullptr) {
 				GL_CALL(glGetShaderInfoLog(id, log_size, &log_size, log));
-				std::cerr << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
-					<< " shader.\n";
+				std::string shaderType;
+				if (type == GL_VERTEX_SHADER)
+					shaderType = "vertex";
+				else if (type == GL_GEOMETRY_SHADER)
+					shaderType = "geometry";
+				else if (type == GL_FRAGMENT_SHADER)
+					shaderType = "fragment";
+				else if (type == GL_COMPUTE_SHADER)
+					shaderType = "compute";
+				else
+					shaderType = "unknown type";
+
+				std::cerr << "Failed to compile " << shaderType << " shader.\n";
 				std::cerr << log << std::endl;
 				std::free(log);
 			}
@@ -67,6 +78,27 @@ namespace GLEngine
 		return true;
 	}
 
+	Program::Program(const std::string& compute_src)
+	{
+		m_id = glCreateProgram(); GL_AFTER_CHECK();
+
+		auto compute = compileShader(compute_src, GL_COMPUTE_SHADER);
+
+		if (compute == 0)
+			std::cerr << "Compilation failed for compute shader." << std::endl;
+
+		GL_CALL(glAttachShader(m_id, compute));
+
+		bool linkSuccess = linkProgram(m_id);
+
+		GL_CALL(glDeleteShader(compute));
+
+		if (!linkSuccess)
+		{
+			GL_CALL(glDeleteProgram(m_id));
+		}
+	}
+
 	Program::Program(const std::string& vertex_src, const std::string& fragment_src)
 	{
 		m_id = glCreateProgram(); GL_AFTER_CHECK();
@@ -94,6 +126,39 @@ namespace GLEngine
 		}
 	}
 
+	Program::Program(const std::string& vertex_src, const std::string& geometry_src, const std::string& fragment_src)
+	{
+		m_id = glCreateProgram(); GL_AFTER_CHECK();
+
+		auto vertex = compileShader(vertex_src, GL_VERTEX_SHADER);
+		auto geometry = compileShader(geometry_src, GL_GEOMETRY_SHADER);
+		auto fragment = compileShader(fragment_src, GL_FRAGMENT_SHADER);
+
+		if (vertex == 0)
+			std::cerr << "Compilation failed for vertex shader." << std::endl;
+
+		if (geometry == 0)
+			std::cerr << "Compilation failed for geometry shader." << std::endl;
+
+		if (fragment == 0)
+			std::cerr << "Compilation failed for fragment shader." << std::endl;
+
+		GL_CALL(glAttachShader(m_id, vertex));
+		GL_CALL(glAttachShader(m_id, geometry));
+		GL_CALL(glAttachShader(m_id, fragment));
+
+		bool linkSuccess = linkProgram(m_id);
+
+		GL_CALL(glDeleteShader(vertex));
+		GL_CALL(glDeleteShader(geometry));
+		GL_CALL(glDeleteShader(fragment));
+
+		if (!linkSuccess)
+		{
+			GL_CALL(glDeleteProgram(m_id));
+		}
+	}
+
 	Program::~Program()
 	{
 		GL_CALL(glDeleteProgram(m_id));
@@ -109,12 +174,28 @@ namespace GLEngine
 		return shader.str();
 	}
 
+	std::shared_ptr<Program> Program::fromFiles(const std::string& compute_path)
+	{
+		auto compute_src = loadShaderFile(compute_path);
+
+		return std::make_shared<Program>(compute_src);
+	}
+
 	std::shared_ptr<Program> Program::fromFiles(const std::string& vertex_path, const std::string& fragment_path)
 	{
 		auto vertex_src = loadShaderFile(vertex_path);
 		auto fragment_src = loadShaderFile(fragment_path);
 
 		return std::make_shared<Program>(vertex_src, fragment_src);
+	}
+
+	std::shared_ptr<Program> Program::fromFiles(const std::string& vertex_path, const std::string& geometry_path, const std::string& fragment_path)
+	{
+		auto vertex_src = loadShaderFile(vertex_path);
+		auto geometry_src = loadShaderFile(geometry_path);
+		auto fragment_src = loadShaderFile(fragment_path);
+
+		return std::make_shared<Program>(vertex_src, geometry_src, fragment_src);
 	}
 
 	void Program::use()

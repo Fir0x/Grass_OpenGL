@@ -99,8 +99,8 @@ int main(void)
         object->getTransform().scale(0.5f);
         toRender.push_back(object);
 
-        auto shader = GLEngine::Program::fromFiles("shaders\\core\\base.vert", "shaders\\core\\base.frag");
-        shader->use();
+        auto baseProgram = GLEngine::Program::fromFiles("shaders\\core\\base.vert", "shaders\\core\\base.frag");
+        auto test = GLEngine::Program::fromFiles("shaders\\debug\\debugPlane.vert", "shaders\\debug\\debugPlane.geom", "shaders\\debug\\debugPlane.frag");
         glm::vec3 white(1.0f);
         GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));
         GLEngine::PointLight pointLight1(white, glm::vec3(3.0f, 0.0f, 0.0f), 100);
@@ -123,21 +123,22 @@ int main(void)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            //dirLight.SetupShaderProperties(shader, 0);
-            pointLight1.SetupShaderProperties(*shader, 0);
-            pointLight2.SetupShaderProperties(*shader, 1);
-            //spotLight.SetupShaderProperties(shader, 0);
-
             // Update step
             for (const auto& obj : toRender)
             {
                 obj->update();
             }
 
+            baseProgram->use();
+            //dirLight.SetupShaderProperties(shader, 0);
+            pointLight1.SetupShaderProperties(*baseProgram, 0);
+            pointLight2.SetupShaderProperties(*baseProgram, 1);
+            //spotLight.SetupShaderProperties(shader, 0);
+
             // Draw step
             for (const auto& obj : toRender)
             {
-                obj->draw({ *shader, mainCamera.getViewMatrix() });
+                obj->draw({ *baseProgram, mainCamera.getViewMatrix() });
             }
 
             glfwSwapBuffers(window);

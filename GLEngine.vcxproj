@@ -205,7 +205,10 @@
   <ItemGroup>
     <None Include="shaders\core\base.frag" />
     <None Include="shaders\core\base.vert" />
-    <None Include="shaders\debug\debug_lighting.glsl" />
+    <None Include="shaders\core\genPlane.comp" />
+    <None Include="shaders\debug\debugPlane.frag" />
+    <None Include="shaders\debug\debugPlane.geom" />
+    <None Include="shaders\debug\debugPlane.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

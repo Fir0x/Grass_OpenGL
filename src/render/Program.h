@@ -23,10 +23,14 @@ namespace GLEngine
 		int getUniformLocation(const char* name);
 
 	public:
+		Program(const std::string& compute_src);
 		Program(const std::string& vertex_src, const std::string& fragment_src);
+		Program(const std::string& vertex_src, const std::string& geometry_src, const std::string& fragment_src);
 		~Program();
 
+		static std::shared_ptr<Program> fromFiles(const std::string& compute_path);
 		static std::shared_ptr<Program> fromFiles(const std::string& vertex_path, const std::string& fragment_path);
+		static std::shared_ptr<Program> fromFiles(const std::string& vertex_path, const std::string& geometry_path, const std::string& fragment_path);
 
 		void use();
 
