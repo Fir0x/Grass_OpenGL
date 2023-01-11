@@ -11,7 +11,7 @@ namespace GLEngine
 		GL_CALL(glGenVertexArrays(1, &m_id));
 		GL_CALL(glBindVertexArray(m_id));
 
-		vb.bind(ByteBuffer::UsageType::VertexBuffer);
+		vb.bind(BufferUsageType::VertexBuffer);
 		const auto& elements = layout.get_elements();
 		size_t offset = 0;
 		for (unsigned int i = 0; i < elements.size(); i++)

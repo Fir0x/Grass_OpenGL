@@ -1,5 +1,30 @@
-# version 450
+#version 450
+
+layout(local_size_x = 32, local_size_y = 32) in;
+
+struct Point
+{
+	vec2 position;
+	vec2 uv;
+	vec3 normal;
+};
+
+layout(std430, binding=0) buffer pointBuffer
+{
+	Point points[1024];
+};
+
+float pointOffset = 0.1;
 
 void main() {
+	float x = gl_GlobalInvocationID.x * pointOffset;
+	float y = gl_GlobalInvocationID.y * pointOffset;
 
+	Point p;
+	p.position = vec2(x, y);
+	p.normal = vec3(0.0, 1.0, 0.0);
+	p.uv = vec2(gl_GlobalInvocationID.x / float(gl_WorkGroupSize.x), gl_GlobalInvocationID.y / float(gl_WorkGroupSize.y));
+
+	uint bufferIdx = gl_GlobalInvocationID.y * gl_NumWorkGroups.x * gl_WorkGroupSize.x + gl_GlobalInvocationID.x;
+	points[bufferIdx] = p;
 }

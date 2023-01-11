@@ -1,5 +1,7 @@
 #pragma once
 
+#include "BufferDefs.h"
+
 namespace GLEngine
 {
 	class ByteBuffer
@@ -11,30 +13,24 @@ namespace GLEngine
 		size_t m_size;
 
 	public:
-		enum UsageType
-		{
-			VertexBuffer,
-			IndexBuffer,
-			UniformBuffer
-		};
-
-		enum AccessType
-		{
-			Read,
-			Write,
-			Read_Write
-		};
-
+		ByteBuffer(size_t size);
 		ByteBuffer(const void* data, size_t size);
 		~ByteBuffer();
 
-		void bind(UsageType usageType) const;
+		void bind(BufferUsageType usageType) const;
 		/// <summary>
 		/// Bind a buffer as a uniform buffer on a binding point..
 		/// </summary>
 		/// <param name="bindingPoint"></param>
-		void bind(int bindingPoint) const;
-		void setAccess(AccessType accessType) const;
+		
+		template<BufferUsageType U>
+		void bind(int bindingPoint) const
+		{
+			static_assert(U == BufferUsageType::UniformBuffer || U == BufferUsageType::ShaderStorage, "Bad usage type");
+			glBindBufferBase(usageType2GL(U), bindingPoint, m_id);
+		}
+
+		void setAccess(BufferAccessType accessType) const;
 	};
 }
 

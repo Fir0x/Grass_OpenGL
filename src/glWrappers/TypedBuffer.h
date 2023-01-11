@@ -8,6 +8,10 @@ namespace GLEngine
 	class TypedBuffer : public ByteBuffer
 	{
 	public:
+		TypedBuffer(size_t count) : ByteBuffer(count * sizeof(T))
+		{
+		}
+
 		TypedBuffer(const T* data, size_t count) : ByteBuffer(data, count * sizeof(T))
 		{
 		}

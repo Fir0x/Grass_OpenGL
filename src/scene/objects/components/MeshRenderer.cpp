@@ -41,7 +41,7 @@ namespace GLEngine
 	{
 		MaterialLibrary::useMaterial(m_materialId, context.currentShader);
 		m_vao->bind();
-		m_ibo->bind(ByteBuffer::UsageType::IndexBuffer);
+		m_ibo->bind(BufferUsageType::IndexBuffer);
 		GL_CALL(glDrawElements(GL_TRIANGLES, m_ibo->getCount(), GL_UNSIGNED_INT, nullptr));
 	}
 }

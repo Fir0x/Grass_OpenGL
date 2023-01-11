@@ -68,7 +68,7 @@ int main(void)
     glDepthFunc(GL_LESS);
     glDepthRange(0.0, 1.0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glEnable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
@@ -82,30 +82,11 @@ int main(void)
         glfwSetFramebufferSizeCallback(window, screen_size_callback);
 
         std::vector<GLEngine::Object*> toRender;
-        auto mesh = GLEngine::StaticMesh::loadOBJFile("meshes\\cylinder.obj");
-        if (!mesh.has_value())
-            return 1;
-
-        unsigned int matId = GLEngine::MaterialLibrary::loadFromMtl("meshes\\cylinder.mtl");
-
-        auto renderer = new GLEngine::MeshRenderer(mesh.value());
-        renderer->setMaterial(matId);
-
-        auto* object = new GLEngine::Object(renderer);
-        GLEngine::QuickBehavior bhv([](GLEngine::Object* obj) {
-                obj->getTransform().rotate(0.01f, 0.01f, 0.01f);
-            });
-        object->setBehavior(&bhv);
-        object->getTransform().scale(0.5f);
-        toRender.push_back(object);
 
         auto baseProgram = GLEngine::Program::fromFiles("shaders\\core\\base.vert", "shaders\\core\\base.frag");
-        auto test = GLEngine::Program::fromFiles("shaders\\debug\\debugPlane.vert", "shaders\\debug\\debugPlane.geom", "shaders\\debug\\debugPlane.frag");
-        glm::vec3 white(1.0f);
-        GLEngine::DirectionalLight dirLight(white, glm::vec3(0.0f, -1.0f, 0.0f));
-        GLEngine::PointLight pointLight1(white, glm::vec3(3.0f, 0.0f, 0.0f), 100);
-        GLEngine::PointLight pointLight2(white, glm::vec3(-3.0f, 0.0f, 0.0f), 100);
-        GLEngine::SpotLight spotLight(white, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), 25.0f, 35.0f, 100);
+        auto computeProgram = GLEngine::Program::fromFiles("shaders\\core\\genPlane.comp");
+        auto grassProgram = GLEngine::Program::fromFiles("shaders\\core\\grass.vert", "shaders\\core\\grass.geom", "shaders\\core\\grass.frag");
+        auto debugProgram = GLEngine::Program::fromFiles("shaders\\debug\\debugPlane.vert", "shaders\\debug\\debugPlane.geom", "shaders\\debug\\debugPlane.frag");
 
         struct FrameContext
         {
@@ -113,15 +94,36 @@ int main(void)
             glm::mat4 projectionMatrix;
         };
 
+        GLEngine::TypedBuffer<float> grassPlane(1024 * 8);
+
+        GLEngine::VertexBufferLayout layout;
+        layout.Add<float>(2);
+        layout.Add<float>(2);
+        layout.Add<float>(3);
+        layout.Add<float>(1);
+
+        auto grassVAO = GLEngine::VertexArray(grassPlane, layout);
+        glm::mat4 identityModel = glm::mat4(1.0f);
+
         while (!glfwWindowShouldClose(window))
         {
             processInput(window);
 
             FrameContext context = { mainCamera.getViewMatrix(), mainCamera.getProjectionMatrix() };
             GLEngine::TypedBuffer<FrameContext> contextBuffer(&context, 1);
-            contextBuffer.bind(0);
+            contextBuffer.bind<GLEngine::BufferUsageType::UniformBuffer>(0);
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            computeProgram->use();
+            grassPlane.bind<GLEngine::BufferUsageType::ShaderStorage>(0);
+            GL_CALL(glDispatchCompute(1, 1, 1));
+            glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+            grassProgram->use();
+            grassProgram->setUniform("modelMatrix", identityModel);
+            grassVAO.bind();
+            GL_CALL(glDrawArrays(GL_POINTS, 0, 1024));
 
             // Update step
             for (const auto& obj : toRender)
@@ -130,10 +132,6 @@ int main(void)
             }
 
             baseProgram->use();
-            //dirLight.SetupShaderProperties(shader, 0);
-            pointLight1.SetupShaderProperties(*baseProgram, 0);
-            pointLight2.SetupShaderProperties(*baseProgram, 1);
-            //spotLight.SetupShaderProperties(shader, 0);
 
             // Draw step
             for (const auto& obj : toRender)

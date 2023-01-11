@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\glWrappers\BufferDefs.cpp" />
     <ClCompile Include="src\glWrappers\ByteBuffer.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\scene\Camera.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="src\glWrappers\TypedBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\glWrappers\BufferDefs.h" />
     <ClInclude Include="src\glWrappers\ByteBuffer.h" />
     <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\scene\objects\components\Behavior.h" />
@@ -206,6 +208,9 @@
     <None Include="shaders\core\base.frag" />
     <None Include="shaders\core\base.vert" />
     <None Include="shaders\core\genPlane.comp" />
+    <None Include="shaders\core\grass.frag" />
+    <None Include="shaders\core\grass.geom" />
+    <None Include="shaders\core\grass.vert" />
     <None Include="shaders\debug\debugPlane.frag" />
     <None Include="shaders\debug\debugPlane.geom" />
     <None Include="shaders\debug\debugPlane.vert" />

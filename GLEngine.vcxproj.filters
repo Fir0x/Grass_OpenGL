@@ -72,6 +72,9 @@
     <ClCompile Include="src\glWrappers\TypedBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\glWrappers\BufferDefs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glWrappers\VertexArray.h">
@@ -137,6 +140,9 @@
     <ClInclude Include="src\glWrappers\TypedBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\glWrappers\BufferDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\core\base.vert" />
@@ -145,5 +151,8 @@
     <None Include="shaders\debug\debugPlane.vert" />
     <None Include="shaders\debug\debugPlane.frag" />
     <None Include="shaders\debug\debugPlane.geom" />
+    <None Include="shaders\core\grass.vert" />
+    <None Include="shaders\core\grass.geom" />
+    <None Include="shaders\core\grass.frag" />
   </ItemGroup>
 </Project>
