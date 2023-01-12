@@ -2,7 +2,10 @@
 
 layout(location=0) out vec4 output_color;
 
+uniform vec3 sunPosition;
+
 in float gradientT;
+in vec3 fragPosition;
 in vec3 fragNormal;
 in vec2 fragUV;
 
@@ -39,6 +42,10 @@ vec3 colorGradient(vec3 colors[COLOR_COUNT], float anchors[COLOR_COUNT-2], float
 
 void main()
 {
-    vec3 color = colorGradient(gradColors, gradAnchors, gradientT);
+    vec3 lightDir = normalize(sunPosition - fragPosition);
+    vec3 normal = normalize(fragNormal);
+    float factor = max(0.0, dot(lightDir, normal));
+
+    vec3 color = factor * colorGradient(gradColors, gradAnchors, gradientT);
 	output_color = vec4(color, 1.0);
 }

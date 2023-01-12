@@ -106,7 +106,7 @@ int main(void)
         
         GLEngine::UIRenderer uiRenderer(window);
 
-        float sunPos[3] = { 0.0f, 5.0f, 0.0f };
+        glm::vec3 sunPosition(0.0f, 5.0f, 0.0f);
         int patchCount[2] = { 1, 1 };
 
         while (!glfwWindowShouldClose(window))
@@ -130,6 +130,7 @@ int main(void)
             auto grassVAO = GLEngine::VertexArray(grassPlane, grassBufferLayout);
             grassProgram->use();
             grassProgram->setUniform("modelMatrix", identityModel);
+            grassProgram->setUniform("sunPosition", sunPosition);
             grassVAO.bind();
             GL_CALL(glDrawArrays(GL_POINTS, 0, grassBladeCount));
 
@@ -151,7 +152,7 @@ int main(void)
             uiRenderer.start();
             {
                 ImGui::Begin("Debug");
-                ImGui::DragFloat3("Sun position", sunPos, 0.25f);
+                ImGui::DragFloat3("Sun position", glm::value_ptr(sunPosition), 0.25f);
                 ImGui::SliderInt2("Grass patch count", patchCount, 1, 5);
 
                 ImGui::End();

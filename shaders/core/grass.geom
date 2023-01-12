@@ -23,6 +23,7 @@ in vec3 geoNormal[1];
 in vec2 geoUV[1];
 
 out float gradientT;
+out vec3 fragPosition;
 out vec3 fragNormal;
 out vec2 fragUV;
 
@@ -77,16 +78,19 @@ void main() {
 		// Left triangle
 		gl_Position = transfertMatrix * vec4(leftX, topY, centerZ, 1.0);
 		gradientT = (topY - centerY) / totalHeight;
+		fragPosition = vec3(leftX, topY, centerZ);
 		fragNormal = leftSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(leftX, bottomY, centerZ, 1.0);
 		gradientT = (bottomY - centerY) / totalHeight;
+		fragPosition = vec3(leftX, bottomY, centerZ);
 		fragNormal = leftSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(rightX, topY, centerZ, 1.0);
 		gradientT = (topY - centerY) / totalHeight;
+		fragPosition = vec3(rightX, topY, centerZ);
 		fragNormal = rightSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
@@ -95,16 +99,19 @@ void main() {
 		// Right triangle
 		gl_Position = transfertMatrix * vec4(rightX, topY, centerZ, 1.0);
 		gradientT = (topY - centerY) / totalHeight;
+		fragPosition = vec3(rightX, topY, centerZ);
 		fragNormal = rightSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(leftX, bottomY, centerZ, 1.0);
 		gradientT = (bottomY - centerY) / totalHeight;
+		fragPosition = vec3(leftX, bottomY, centerZ);
 		fragNormal = leftSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(rightX, bottomY, centerZ, 1.0);
 		gradientT = (bottomY - centerY) / totalHeight;
+		fragPosition = vec3(rightX, bottomY, centerZ);
 		fragNormal = rightSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
@@ -124,16 +131,19 @@ void main() {
 
 	gl_Position = transfertMatrix * vec4(leftX, bottomY, centerZ, 1.0);
 	gradientT = (bottomY - centerY) / totalHeight;
+	fragPosition = vec3(leftX, bottomY, centerZ);
 	fragNormal = leftSegmentNormal;
 	fragUV = uv;
 	EmitVertex();
 	gl_Position = transfertMatrix * vec4(rightX, bottomY, centerZ, 1.0);
 	gradientT = (bottomY - centerY) / totalHeight;
+	fragPosition = vec3(rightX, bottomY, centerZ);
 	fragNormal = rightSegmentNormal;
 	fragUV = uv;
 	EmitVertex();
 	gl_Position = transfertMatrix * vec4(centerX, topY, centerZ, 1.0);
 	gradientT = 1.0;
+	fragPosition = vec3(centerX, topY, centerZ);
 	fragNormal = tipNormal;
 	fragUV = uv;
 	EmitVertex();
