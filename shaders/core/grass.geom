@@ -27,10 +27,11 @@ out vec3 fragPosition;
 out vec3 fragNormal;
 out vec2 fragUV;
 
+const float bladeHeight = 0.4;
 const float segmentWidth = 0.02;
-const float segmentHeight = 0.1;
-const float tipFactor = 0.3;
-const float totalHeight = (SEGMENT_COUNT + tipFactor) * segmentHeight;
+const float tipFactor = 0.1;
+const float segmentHeight = ((1.0 - tipFactor) * bladeHeight) / SEGMENT_COUNT;
+
 const float normalRotationAngle = 45.0;
 
 mat4 rotationMatrix(vec3 axis, float angle)
@@ -46,7 +47,15 @@ mat4 rotationMatrix(vec3 axis, float angle)
                 0.0,                                0.0,                                0.0,                                1.0);
 }
 
-void main() {
+vec3 quadraticBezier(vec3 p0, vec3 p1, vec3 p2, float t)
+{
+	vec3 a = mix(p0, p1, t);
+	vec3 b = mix(p1, p2, t);
+	return mix(a, b, t);
+}
+
+void main()
+{
 	mat4 transfertMatrix = frame.projectionMatrix * frame.viewMatrix * modelMatrix;
 
 	float centerX = geoPosition[0].x;
@@ -58,6 +67,9 @@ void main() {
 
 	float leftX = centerX - segmentWidth;
 	float rightX = centerX + segmentWidth;
+
+	vec3 bladeMiddleAnchor;
+	vec3 bladeTopAnchor;
 
 	const mat4 normalLeftRotation = rotationMatrix(grassDirection, normalRotationAngle);
 	const mat4 normalRightRotation = rotationMatrix(grassDirection, -normalRotationAngle);
@@ -77,19 +89,19 @@ void main() {
 
 		// Left triangle
 		gl_Position = transfertMatrix * vec4(leftX, topY, centerZ, 1.0);
-		gradientT = (topY - centerY) / totalHeight;
+		gradientT = (topY - centerY) / bladeHeight;
 		fragPosition = vec3(leftX, topY, centerZ);
 		fragNormal = leftSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(leftX, bottomY, centerZ, 1.0);
-		gradientT = (bottomY - centerY) / totalHeight;
+		gradientT = (bottomY - centerY) / bladeHeight;
 		fragPosition = vec3(leftX, bottomY, centerZ);
 		fragNormal = leftSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(rightX, topY, centerZ, 1.0);
-		gradientT = (topY - centerY) / totalHeight;
+		gradientT = (topY - centerY) / bladeHeight;
 		fragPosition = vec3(rightX, topY, centerZ);
 		fragNormal = rightSegmentNormal;
 		fragUV = uv;
@@ -98,19 +110,19 @@ void main() {
 
 		// Right triangle
 		gl_Position = transfertMatrix * vec4(rightX, topY, centerZ, 1.0);
-		gradientT = (topY - centerY) / totalHeight;
+		gradientT = (topY - centerY) / bladeHeight;
 		fragPosition = vec3(rightX, topY, centerZ);
 		fragNormal = rightSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(leftX, bottomY, centerZ, 1.0);
-		gradientT = (bottomY - centerY) / totalHeight;
+		gradientT = (bottomY - centerY) / bladeHeight;
 		fragPosition = vec3(leftX, bottomY, centerZ);
 		fragNormal = leftSegmentNormal;
 		fragUV = uv;
 		EmitVertex();
 		gl_Position = transfertMatrix * vec4(rightX, bottomY, centerZ, 1.0);
-		gradientT = (bottomY - centerY) / totalHeight;
+		gradientT = (bottomY - centerY) / bladeHeight;
 		fragPosition = vec3(rightX, bottomY, centerZ);
 		fragNormal = rightSegmentNormal;
 		fragUV = uv;
@@ -120,7 +132,7 @@ void main() {
 
 	// Top triangle
 	float bottomY = centerY + SEGMENT_COUNT * segmentHeight;
-	float topY = centerY + (SEGMENT_COUNT + tipFactor) * segmentHeight;
+	float topY = centerY + bladeHeight;
 	
 	const vec3 right = normalize(vec3(rightX - centerX, 0.0, 0.0));
 	const vec3 up = normalize(vec3(0.0, topY - centerY, 0.0));
@@ -130,13 +142,13 @@ void main() {
 	const vec3 rightSegmentNormal = vec3(normalRightRotation * vec4(tipNormal, 1.0));
 
 	gl_Position = transfertMatrix * vec4(leftX, bottomY, centerZ, 1.0);
-	gradientT = (bottomY - centerY) / totalHeight;
+	gradientT = (bottomY - centerY) / bladeHeight;
 	fragPosition = vec3(leftX, bottomY, centerZ);
 	fragNormal = leftSegmentNormal;
 	fragUV = uv;
 	EmitVertex();
 	gl_Position = transfertMatrix * vec4(rightX, bottomY, centerZ, 1.0);
-	gradientT = (bottomY - centerY) / totalHeight;
+	gradientT = (bottomY - centerY) / bladeHeight;
 	fragPosition = vec3(rightX, bottomY, centerZ);
 	fragNormal = rightSegmentNormal;
 	fragUV = uv;
