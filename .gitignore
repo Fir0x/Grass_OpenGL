@@ -109,3 +109,4 @@ ipch/
 # Project
 !meshes/*.obj
 !shaders/debug/
+imgui.ini
