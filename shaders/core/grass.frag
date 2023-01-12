@@ -48,5 +48,6 @@ void main()
 
     vec3 baseColor = colorGradient(gradColors, gradAnchors, gradientT);
     vec3 color = (factor + 0.1) * baseColor;
+
 	output_color = vec4(color, 1.0);
 }

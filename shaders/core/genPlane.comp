@@ -14,7 +14,7 @@ layout(std430, binding=0) buffer pointBuffer
 	Point points[1024];
 };
 
-float pointOffset = 0.1;
+float pointOffset = 0.07;
 
 void main() {
 	float x = gl_GlobalInvocationID.x * pointOffset;
