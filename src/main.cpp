@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/ext.hpp>
+#include <imgui/imgui.h>
 #include <iostream>
 
 #include "render/Program.h"
@@ -12,6 +13,7 @@
 #include "scene/lights/PointLight.h"
 #include "scene/lights/SpotLight.h"
 #include "InputManager.h"
+#include "UIRenderer.h"
 
 static GLEngine::Camera mainCamera;
 
@@ -94,20 +96,22 @@ int main(void)
             glm::mat4 projectionMatrix;
         };
 
-        GLEngine::TypedBuffer<float> grassPlane(1024 * 8);
-
-        GLEngine::VertexBufferLayout layout;
-        layout.Add<float>(2);
-        layout.Add<float>(2);
-        layout.Add<float>(3);
-        layout.Add<float>(1);
-
-        auto grassVAO = GLEngine::VertexArray(grassPlane, layout);
         glm::mat4 identityModel = glm::mat4(1.0f);
+
+        GLEngine::VertexBufferLayout grassBufferLayout;
+        grassBufferLayout.Add<float>(2);
+        grassBufferLayout.Add<float>(2);
+        grassBufferLayout.Add<float>(3);
+        grassBufferLayout.Add<float>(1);
+        
+        GLEngine::UIRenderer uiRenderer(window);
+
+        float sunPos[3] = { 0.0f, 5.0f, 0.0f };
+        int patchCount[2] = { 1, 1 };
 
         while (!glfwWindowShouldClose(window))
         {
-            processInput(window);
+            processInput(window, uiRenderer);
 
             FrameContext context = { mainCamera.getViewMatrix(), mainCamera.getProjectionMatrix() };
             GLEngine::TypedBuffer<FrameContext> contextBuffer(&context, 1);
@@ -115,15 +119,19 @@ int main(void)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            int grassBladeCount = 1024 * patchCount[0] * patchCount[1];
+            GLEngine::TypedBuffer<float> grassPlane(grassBladeCount * 8);
+
             computeProgram->use();
             grassPlane.bind<GLEngine::BufferUsageType::ShaderStorage>(0);
-            GL_CALL(glDispatchCompute(1, 1, 1));
+            GL_CALL(glDispatchCompute(patchCount[0], patchCount[1], 1));
             glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
+            auto grassVAO = GLEngine::VertexArray(grassPlane, grassBufferLayout);
             grassProgram->use();
             grassProgram->setUniform("modelMatrix", identityModel);
             grassVAO.bind();
-            GL_CALL(glDrawArrays(GL_POINTS, 0, 1024));
+            GL_CALL(glDrawArrays(GL_POINTS, 0, grassBladeCount));
 
             // Update step
             for (const auto& obj : toRender)
@@ -138,6 +146,17 @@ int main(void)
             {
                 obj->draw({ *baseProgram, mainCamera.getViewMatrix() });
             }
+
+            // UI
+            uiRenderer.start();
+            {
+                ImGui::Begin("Debug");
+                ImGui::DragFloat3("Sun position", sunPos, 0.25f);
+                ImGui::SliderInt2("Grass patch count", patchCount, 1, 5);
+
+                ImGui::End();
+            }
+            uiRenderer.finish();
 
             glfwSwapBuffers(window);
 

@@ -12,7 +12,7 @@ void linkCamera(GLEngine::Camera* camera)
     mainCamera = camera;
 }
 
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* window, const GLEngine::UIRenderer& uiRenderer)
 {
     static float speed = 2.5f;
     static glm::vec3 worldUp(0.0f, 1.0f, 0.0f);
@@ -38,14 +38,19 @@ void processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
     {
+        if (!uiRenderer.forwardMouseEvent(GLFW_MOUSE_BUTTON_LEFT, true))
+            return;
+
         if (!mouseCamera)
             firstFocus = true;
 
         mouseCamera = true;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
+
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
     {
         mouseCamera = false;

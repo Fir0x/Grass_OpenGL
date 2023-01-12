@@ -10,9 +10,9 @@ in vec2 fragUV;
 
 vec3 gradColors[COLOR_COUNT] = vec3[](
     vec3(0.0, 0.0, 0.0),
-    vec3(0.0, 0.7, 0.0),
-    vec3(0.0, 1.0, 0.0),
-    vec3(1.0, 1.0, 1.0)
+    vec3(0.17, 0.74, 0.0),
+    vec3(0.17, 0.74, 0.0),
+    vec3(0.66, 1.0, 0.55)
 );
 
 float gradAnchors[COLOR_COUNT-2] = float[](0.15,0.8);
@@ -40,5 +40,5 @@ vec3 colorGradient(vec3 colors[COLOR_COUNT], float anchors[COLOR_COUNT-2], float
 void main()
 {
     vec3 color = colorGradient(gradColors, gradAnchors, gradientT);
-	output_color = vec4(color, 1.0);//vec4(0.0, 1.0, 0.0, 1.0);
+	output_color = vec4(color, 1.0);
 }
