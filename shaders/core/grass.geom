@@ -2,14 +2,15 @@
 
 layout(points) in;
 
-#define SEGMENT_COUNT 10
+#define SEGMENT_COUNT 7
 
-layout(triangle_strip, max_vertices=SEGMENT_COUNT * 6 + 3) out;
+layout(triangle_strip, max_vertices=(SEGMENT_COUNT * 6 + 3) * 2) out;
 
 struct FrameContext
 {
 	mat4 viewMatrix;
 	mat4 projectionMatrix;
+	float time;
 };
 
 layout(binding = 0) uniform Data {
@@ -108,8 +109,16 @@ void main()
 	
 	vec3 bladeMiddleAnchor = bladeBase + bladeDirection * bladeHeight / 2.0;
 	vec3 bladeTopAnchor = bladeBase + bladeDirection * bladeHeight;
-	bladeMiddleAnchor += vec3(-0.3, 0.5, 0.1);
-	bladeTopAnchor += vec3(0.2, 0.0, -0.2);
+
+	float shiftFactor = 0.3 * sin(0.001 * frame.time);
+	bladeMiddleAnchor += bladeOrientation * shiftFactor / 10.0;
+	bladeTopAnchor += bladeOrientation * shiftFactor;
+
+	//float lengthOffset = length(bladeMiddleAnchor - bladeBase) - bladeHeight / 2.0;
+	//bladeMiddleAnchor += int(lengthOffset != 0) * normalize(bladeBase - bladeMiddleAnchor) * lengthOffset;
+
+	//lengthOffset = length(bladeTopAnchor - bladeMiddleAnchor) - bladeHeight / 2.0;
+	//bladeTopAnchor += int(lengthOffset != 0) * normalize(bladeMiddleAnchor - bladeTopAnchor) * lengthOffset;
 
 	const mat4 normalLeftRotation = rotationMatrix(bladeDirection, normalRotationAngle);
 	const mat4 normalRightRotation = rotationMatrix(bladeDirection, -normalRotationAngle);
@@ -134,6 +143,7 @@ void main()
 		const vec3 leftSegmentNormal = vec3(normalLeftRotation * vec4(segmentNormal, 1.0));
 		const vec3 rightSegmentNormal = vec3(normalRightRotation * vec4(segmentNormal, 1.0));
 
+		// Front face
 		// Left triangle
 		gl_Position = transfertMatrix * vec4(topLeft, 1.0);
 		gradientT = segmentInfos.topGradientT;
@@ -175,6 +185,50 @@ void main()
 		fragUV = uv;
 		EmitVertex();
 		EndPrimitive();
+
+		// Back face
+		vec3 correction =  -bladeOrientation * 0.001;
+		// Left triangle
+		gl_Position = transfertMatrix * vec4(topRight + correction, 1.0);
+		gradientT = segmentInfos.topGradientT;
+		fragPosition = topRight;
+		fragNormal = -leftSegmentNormal;
+		fragUV = uv;
+		EmitVertex();
+		gl_Position = transfertMatrix * vec4(bottomRight + correction, 1.0);
+		gradientT = segmentInfos.bottomGradientT;
+		fragPosition = bottomRight;
+		fragNormal = -leftSegmentNormal;
+		fragUV = uv;
+		EmitVertex();
+		gl_Position = transfertMatrix * vec4(topLeft + correction, 1.0);
+		gradientT = segmentInfos.topGradientT;
+		fragPosition = topLeft;
+		fragNormal = -rightSegmentNormal;
+		fragUV = uv;
+		EmitVertex();
+		EndPrimitive();
+
+		// Right triangle
+		gl_Position = transfertMatrix * vec4(topLeft + correction, 1.0);
+		gradientT = segmentInfos.topGradientT;
+		fragPosition = topLeft;
+		fragNormal = -rightSegmentNormal;
+		fragUV = uv;
+		EmitVertex();
+		gl_Position = transfertMatrix * vec4(bottomRight + correction, 1.0);
+		gradientT = segmentInfos.bottomGradientT;
+		fragPosition = bottomRight;
+		fragNormal = -leftSegmentNormal;
+		fragUV = uv;
+		EmitVertex();
+		gl_Position = transfertMatrix * vec4(bottomLeft + correction, 1.0);
+		gradientT = segmentInfos.bottomGradientT;
+		fragPosition = bottomLeft;
+		fragNormal = -rightSegmentNormal;
+		fragUV = uv;
+		EmitVertex();
+		EndPrimitive();
 	}
 
 	// Top triangle
@@ -206,6 +260,26 @@ void main()
 	gradientT = 1.0;
 	fragPosition = tipInfos.topCenter;
 	fragNormal = tipNormal;
+	fragUV = uv;
+	EmitVertex();
+	EndPrimitive();
+
+	gl_Position = transfertMatrix * vec4(bottomRight, 1.0);
+	gradientT = tipInfos.bottomGradientT;
+	fragPosition = bottomRight;
+	fragNormal = -tipInfos.leftSegmentNormal;
+	fragUV = uv;
+	EmitVertex();
+	gl_Position = transfertMatrix * vec4(bottomLeft, 1.0);
+	gradientT = tipInfos.bottomGradientT;
+	fragPosition = bottomLeft;
+	fragNormal = -tipInfos.rightSegmentNormal;
+	fragUV = uv;
+	EmitVertex();
+	gl_Position = transfertMatrix * vec4(tipInfos.topCenter, 1.0);
+	gradientT = 1.0;
+	fragPosition = tipInfos.topCenter;
+	fragNormal = -tipNormal;
 	fragUV = uv;
 	EmitVertex();
 	EndPrimitive();

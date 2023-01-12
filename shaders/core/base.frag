@@ -53,6 +53,7 @@ struct FrameContext
 {
 	mat4 viewMatrix;
 	mat4 projectionMatrix;
+	float time;
 };
 
 layout(binding = 0) uniform Data {

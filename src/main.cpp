@@ -3,6 +3,7 @@
 #include <glm/ext.hpp>
 #include <imgui/imgui.h>
 #include <iostream>
+#include <chrono>
 
 #include "render/Program.h"
 #include "glWrappers/glError.h"
@@ -70,7 +71,7 @@ int main(void)
     glDepthFunc(GL_LESS);
     glDepthRange(0.0, 1.0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDisable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 
@@ -94,6 +95,7 @@ int main(void)
         {
             glm::mat4 viewMatrix;
             glm::mat4 projectionMatrix;
+            float elapsedTime;
         };
 
         glm::mat4 identityModel = glm::mat4(1.0f);
@@ -109,11 +111,16 @@ int main(void)
         glm::vec3 sunPosition(0.0f, 5.0f, 0.0f);
         int patchCount[2] = { 1, 1 };
 
+        auto startTime = std::chrono::system_clock::now();
+
         while (!glfwWindowShouldClose(window))
         {
             processInput(window, uiRenderer);
 
-            FrameContext context = { mainCamera.getViewMatrix(), mainCamera.getProjectionMatrix() };
+            auto currentTime = std::chrono::system_clock::now();
+            auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count();
+
+            FrameContext context = { mainCamera.getViewMatrix(), mainCamera.getProjectionMatrix(), elapsedTime };
             GLEngine::TypedBuffer<FrameContext> contextBuffer(&context, 1);
             contextBuffer.bind<GLEngine::BufferUsageType::UniformBuffer>(0);
 

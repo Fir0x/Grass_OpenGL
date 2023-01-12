@@ -46,6 +46,7 @@ void main()
     vec3 normal = normalize(fragNormal);
     float factor = max(0.0, dot(lightDir, normal));
 
-    vec3 color = factor * colorGradient(gradColors, gradAnchors, gradientT);
+    vec3 baseColor = colorGradient(gradColors, gradAnchors, gradientT);
+    vec3 color = (factor + 0.1) * baseColor;
 	output_color = vec4(color, 1.0);
 }
