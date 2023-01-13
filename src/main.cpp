@@ -112,6 +112,7 @@ int main(void)
         int patchCount[2] = { 1, 1 };
         bool useBrownian = false;
         bool useLengthConstraint = false;
+        bool debugView = false;
 
         auto startTime = std::chrono::system_clock::now();
 
@@ -137,11 +138,22 @@ int main(void)
             glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
             auto grassVAO = GLEngine::VertexArray(grassPlane, grassBufferLayout);
-            grassProgram->use();
-            grassProgram->setUniform("modelMatrix", identityModel);
-            grassProgram->setUniform("sunPosition", sunPosition);
-            grassProgram->setUniform("useBrownian", useBrownian);
-            grassProgram->setUniform("useLengthConstraint", useLengthConstraint);
+
+            if (debugView)
+            {
+                debugProgram->use();
+                debugProgram->setUniform("modelMatrix", identityModel);
+            }
+            else
+            {
+                auto grassVAO = GLEngine::VertexArray(grassPlane, grassBufferLayout);
+                grassProgram->use();
+                grassProgram->setUniform("modelMatrix", identityModel);
+                grassProgram->setUniform("sunPosition", sunPosition);
+                grassProgram->setUniform("useBrownian", useBrownian);
+                grassProgram->setUniform("useLengthConstraint", useLengthConstraint);
+            }
+
             grassVAO.bind();
             GL_CALL(glDrawArrays(GL_POINTS, 0, grassBladeCount));
 
@@ -167,6 +179,7 @@ int main(void)
                 ImGui::SliderInt2("Grass patch count", patchCount, 1, 5);
                 ImGui::Checkbox("Use Brownian motion", &useBrownian);
                 ImGui::Checkbox("Use length constraint", &useLengthConstraint);
+                ImGui::Checkbox("Debug view", &debugView);
 
                 ImGui::End();
             }

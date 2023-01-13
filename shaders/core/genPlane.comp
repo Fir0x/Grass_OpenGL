@@ -16,14 +16,28 @@ layout(std430, binding=0) buffer pointBuffer
 
 float pointOffset = 0.07;
 
+float rand(vec2 co){
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float randRange(vec2 uv, float left, float right)
+{
+	float t = rand(uv);
+	return mix(left, right, t);
+}
+
 void main() {
 	float x = gl_GlobalInvocationID.x * pointOffset;
 	float y = gl_GlobalInvocationID.y * pointOffset;
 
 	Point p;
-	p.position = vec2(x, y);
+	const float maxOffset = 0.05;
+	float xShift = randRange(vec2(x, y), -maxOffset, maxOffset);
+	float yShift = randRange(vec2(y, x), -maxOffset, maxOffset);
+	p.position = vec2(x + xShift, y + yShift);
 	p.normal = vec3(0.0, 1.0, 0.0);
-	p.uv = vec2(gl_GlobalInvocationID.x / float(gl_WorkGroupSize.x * gl_NumWorkGroups.x), gl_GlobalInvocationID.y / float(gl_WorkGroupSize.y * gl_NumWorkGroups.y));
+	p.uv = vec2((gl_GlobalInvocationID.x + xShift) / float(gl_WorkGroupSize.x * gl_NumWorkGroups.x),
+				(gl_GlobalInvocationID.y + yShift) / float(gl_WorkGroupSize.y * gl_NumWorkGroups.y));
 
 	uint bufferIdx = gl_GlobalInvocationID.y * gl_NumWorkGroups.x * gl_WorkGroupSize.x + gl_GlobalInvocationID.x;
 	points[bufferIdx] = p;

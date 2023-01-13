@@ -19,7 +19,7 @@ uniform mat4 modelMatrix;
 
 in vec3 geoPosition[1];
 
-float radius = 0.05;
+float radius = 0.01;
 
 void main() {
 	mat4 transfertMatrix = frame.projectionMatrix * frame.viewMatrix * modelMatrix;
