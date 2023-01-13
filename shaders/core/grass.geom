@@ -28,6 +28,9 @@ out vec3 fragPosition;
 out vec3 fragNormal;
 out vec2 fragUV;
 
+uniform bool useBrownian;
+uniform bool useLengthConstraint;
+
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
@@ -37,6 +40,27 @@ float randRange(vec2 uv, float left, float right)
 	float t = rand(uv);
 	return mix(left, right, t);
 }
+
+float noise(vec2 n) {
+	const vec2 d = vec2(0.0, 1.0);
+  vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));
+	return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);
+}
+
+float fbm(vec2 x) {
+	float v = 0.0;
+	float a = 0.5;
+	vec2 shift = vec2(100);
+	// Rotate to reduce axial bias
+    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+	for (int i = 0; i < 5; ++i) {
+		v += a * noise(x);
+		x = rot * x * 2.0 + shift;
+		a *= 0.5;
+	}
+	return v;
+}
+
 const float tipFactor = 0.1;
 
 #define PI 3.1415926538
@@ -128,15 +152,36 @@ void main()
 	vec3 bladeMiddleAnchor = bladeBase + bladeDirection * bladeHeight / 2.0;
 	vec3 bladeTopAnchor = bladeBase + bladeDirection * bladeHeight;
 
-	float shiftFactor = 0.3 * sin(0.001 * frame.time);
-	bladeMiddleAnchor += bladeOrientation * shiftFactor / 10.0;
-	bladeTopAnchor += bladeOrientation * shiftFactor;
+	float sinShift = 0.3 * sin(0.001 * frame.time);
+	float brownianShift = fbm(vec2(0.0001 * frame.time + fragUV.x, 0.0003 * frame.time + fragUV.y));
 
-	//float lengthOffset = length(bladeMiddleAnchor - bladeBase) - bladeHeight / 2.0;
-	//bladeMiddleAnchor += int(lengthOffset != 0) * normalize(bladeBase - bladeMiddleAnchor) * lengthOffset;
+	if (useBrownian)
+	{
+		bladeMiddleAnchor += bladeOrientation * brownianShift * 0.125;
+		bladeTopAnchor += bladeOrientation * brownianShift * 0.5;
+	}
+	else
+	{
+		if (useLengthConstraint)
+		{
+			bladeMiddleAnchor += bladeOrientation * sinShift * 0.37;
+			bladeTopAnchor += bladeOrientation * sinShift * 2.0;
+		}
+		else
+		{
+			bladeMiddleAnchor += bladeOrientation * sinShift * 0.07;
+			bladeTopAnchor += bladeOrientation * sinShift * 0.7;
+		}
+	}
 
-	//lengthOffset = length(bladeTopAnchor - bladeMiddleAnchor) - bladeHeight / 2.0;
-	//bladeTopAnchor += int(lengthOffset != 0) * normalize(bladeMiddleAnchor - bladeTopAnchor) * lengthOffset;
+	if (useLengthConstraint)
+	{
+		float lengthOffset = length(bladeMiddleAnchor - bladeBase) - bladeHeight / 2.0;
+		bladeMiddleAnchor += int(lengthOffset != 0) * normalize(bladeBase - bladeMiddleAnchor) * lengthOffset;
+
+		lengthOffset = length(bladeTopAnchor - bladeMiddleAnchor) - bladeHeight / 2.0;
+		bladeTopAnchor += int(lengthOffset != 0) * normalize(bladeMiddleAnchor - bladeTopAnchor) * lengthOffset;
+	}
 
 	const mat4 normalLeftRotation = rotationMatrix(bladeDirection, normalRotationAngle);
 	const mat4 normalRightRotation = rotationMatrix(bladeDirection, -normalRotationAngle);

@@ -110,6 +110,8 @@ int main(void)
 
         glm::vec3 sunPosition(0.0f, 5.0f, 0.0f);
         int patchCount[2] = { 1, 1 };
+        bool useBrownian = false;
+        bool useLengthConstraint = false;
 
         auto startTime = std::chrono::system_clock::now();
 
@@ -138,6 +140,8 @@ int main(void)
             grassProgram->use();
             grassProgram->setUniform("modelMatrix", identityModel);
             grassProgram->setUniform("sunPosition", sunPosition);
+            grassProgram->setUniform("useBrownian", useBrownian);
+            grassProgram->setUniform("useLengthConstraint", useLengthConstraint);
             grassVAO.bind();
             GL_CALL(glDrawArrays(GL_POINTS, 0, grassBladeCount));
 
@@ -161,6 +165,8 @@ int main(void)
                 ImGui::Begin("Debug");
                 ImGui::DragFloat3("Sun position", glm::value_ptr(sunPosition), 0.25f);
                 ImGui::SliderInt2("Grass patch count", patchCount, 1, 5);
+                ImGui::Checkbox("Use Brownian motion", &useBrownian);
+                ImGui::Checkbox("Use length constraint", &useLengthConstraint);
 
                 ImGui::End();
             }

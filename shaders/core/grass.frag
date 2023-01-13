@@ -39,6 +39,16 @@ vec3 colorGradient(vec3 colors[COLOR_COUNT], float anchors[COLOR_COUNT-2], float
     
     return mix(lColor, rColor, remapedT);
 }
+struct FrameContext
+{
+	mat4 viewMatrix;
+	mat4 projectionMatrix;
+	float time;
+};
+
+layout(binding = 0) uniform Data {
+	FrameContext frame;
+};
 
 void main()
 {
